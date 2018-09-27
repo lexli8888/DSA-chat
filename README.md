@@ -15,7 +15,7 @@
 **Actions**
 
 | Method | Location Key | Content Key | Content | Signature | Protection | Encryption |
-| --- | --- | --- | --- | ---  | --- | --- | --- |
+| --- | --- | --- | --- | ---  | --- | --- |
 | PUT | user | hash([username]) | [pubkey] | [privkey] | [privkey] | - |
 
 **Steps**
@@ -133,7 +133,7 @@
 **Actions**
 
 | Method | Location Key | Content Key | Content | Signature | Protection | Encryption |
-| --- | --- | --- | --- | ---  | --- | --- | --- |
+| --- | --- | --- | --- | ---  | --- | --- |
 | GET | user | hash([contact_username]) |
 | GET | contactlist | hash([username]) |
 | PUT | contactlist | hash([username]) | [contactlist] | [privkey] | [privkey] | [pubkey] |
@@ -158,7 +158,7 @@
 **Actions**
 
 | Method | Location Key | Content Key | Content | Signature | Protection | Encryption |
-| --- | --- | --- | --- | ---  | --- | --- | --- |
+| --- | --- | --- | --- | ---  | --- | --- |
 | GET | contactlist | hash([username]) |
 | PUT | contactlist | hash([username]) | [contactlist] | [privkey] | [privkey] | [pubkey] |
 
@@ -187,7 +187,7 @@
 **Actions**
 
 | Method | Location Key | Content Key | Content | Signature | Protection | Encryption |
-| --- | --- | --- | --- | ---  | --- | --- | --- |
+| --- | --- | --- | --- | ---  | --- | --- |
 | PUT | [chatid] | name | [name] | [chatprivkey] | [chatprivkey] | [chatpubkey] |
 
 **Steps**
@@ -290,7 +290,7 @@
 **Actions**
 
 | Method | Location Key | Content Key | Content | Signature | Protection | Encryption |
-| --- | --- | --- | --- | ---  | --- | --- | --- |
+| --- | --- | --- | --- | ---  | --- | --- |
 | PUT | hash([chatid] + "-message") | [messageid] | [message] | [privkey] | [chatprivkey] | [chatprivkey] |
 
 **Steps**
