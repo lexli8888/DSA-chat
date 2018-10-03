@@ -16,7 +16,7 @@
 
 | Method | Location Key | Content Key | Content | Signature | Protection | Encryption |
 | --- | --- | --- | --- | ---  | --- | --- |
-| PUT | user | hash([username]) | [pubkey] | [privkey] | [privkey] | - |
+| PUT | hash([username]) | user | [pubkey] | [privkey] | [privkey] | - |
 
 **Steps**
 
@@ -38,7 +38,7 @@
 
 | Method | Location Key | Content Key | 
 | --- | --- | --- |
-| GET | user | hash([username]) |
+| GET | hash([username]) | user |
 
 **Steps**
 
@@ -62,7 +62,7 @@
 
 | Method | Location Key | Content Key | Content | Signature | Protection | Encryption | TTL |
 | --- | --- | --- | --- | ---  | --- | --- | --- |
-| PUT | onlinestatus | hash([username]) | [status] | [privkey] | [privkey] | - | 60 seconds |
+| PUT | hash([username]) | onlinestatus | [status] | [privkey] | [privkey] | - | 60 seconds |
 
 **Steps**
 
@@ -88,7 +88,7 @@
 
 | Method | Location Key | Content Key |
 | --- | --- | --- |
-| GET | onlinestatus | hash([username]) |
+| GET | hash([username]) | onlinestatus |
 
 **Steps**
 
@@ -110,7 +110,7 @@
 
 | Method | Location Key | Content Key |
 | --- | --- | --- |
-| GET | contactlist | hash([username]) |
+| GET | hash([username]) | contactlist |
 
 **Steps**
 
@@ -134,9 +134,9 @@
 
 | Method | Location Key | Content Key | Content | Signature | Protection | Encryption |
 | --- | --- | --- | --- | ---  | --- | --- |
-| GET | user | hash([contact_username]) |
-| GET | contactlist | hash([username]) |
-| PUT | contactlist | hash([username]) | [contactlist] | [privkey] | [privkey] | [pubkey] |
+| GET | hash([contact_username]) | user |
+| GET | hash([username]) | contactlist |
+| PUT | hash([username]) | contactlist | [contactlist] | [privkey] | [privkey] | [pubkey] |
 
 1. Search user with [contact_username] and retrive [contact_publickey]
 2. Fetch if existing contact list exists else use empty list
@@ -159,8 +159,8 @@
 
 | Method | Location Key | Content Key | Content | Signature | Protection | Encryption |
 | --- | --- | --- | --- | ---  | --- | --- |
-| GET | contactlist | hash([username]) |
-| PUT | contactlist | hash([username]) | [contactlist] | [privkey] | [privkey] | [pubkey] |
+| GET | hash([username]) | contactlist |
+| PUT | hash([username]) | contactlist | [contactlist] | [privkey] | [privkey] | [pubkey] |
 
 **Steps**
 
@@ -289,9 +289,9 @@
 
 **Actions**
 
-| Method | Location Key | Content Key | Content | Signature | Protection | Encryption |
-| --- | --- | --- | --- | ---  | --- | --- |
-| PUT | hash([chatid] + "-message") | [messageid] | [message] | [privkey] | [chatprivkey] | [chatprivkey] |
+| Method | Location Key | Content Key | Content | Signature | Protection | Encryption | TTL |
+| --- | --- | --- | --- | ---  | --- | --- | --- |
+| PUT | hash([chatid] + "-message") | [messageid] | [message] | [privkey] | [chatprivkey] | [chatprivkey] | 1 week |
 
 **Steps**
 
