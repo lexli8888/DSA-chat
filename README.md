@@ -1,5 +1,17 @@
 # DSA-chat
 
+## Goals
+* A user can be registered by a unique username
+* A user can set his onlinestatus visible to everyone
+* A user can search other users by username and lookup their public key
+* A user can store his own contact list with the username and public key information
+* Public / Private keys changes of a user can be detected
+* A user can start a new chat and invite other users to join
+* A chat and it's messages are encrypted 
+* A chat can contain two or more users
+* A user can store a list of his chats
+* A message can be stored offline for one week
+
 ## User
 
 ### Register User
@@ -22,7 +34,7 @@
 
 1. Choose [username]
 2. Generate public / private key pair
-3. Create new entry with locationKey = "user", contentKey = hash([username])
+3. Create new entry with locationKey = hash([username]), contentKey = "user"
 	1. If action was successfull, user is registered, set online status immediately
 	2. If action was unsuccessfull, username is already taken
 
@@ -43,7 +55,7 @@
 **Steps**
 
 1. Choose username to search
-2. Try to fetch user with locationKey = "user", contentKey = hash([username])
+2. Try to fetch user with locationKey = hash([username]), contentKey = "user"
 	1. If action was successfull user exists and the content is the public key of the searched user
 	2. If action was unsuccessfull user does not exist
 
@@ -92,7 +104,7 @@
 
 **Steps**
 
-1. Try fetch the onlinestatus by locationKey = "onlinestatus", contentKey = hash([username])
+1. Try fetch the onlinestatus by locationKey = hash([username]), contentKey = "onlinestatus"
 2. If one exists, check if the signature matches with the user [pubkey]
 
 ## Contact List
@@ -114,7 +126,7 @@
 
 **Steps**
 
-1. Try fetch the contactlist by locationKey = "contactlist, contentKey = hash([username])
+1. Try fetch the contactlist by locationKey = hash([username]), contentKey = "contactlist"
 2. Decrypt content value with [privkey]
 
 
@@ -142,7 +154,7 @@
 2. Fetch if existing contact list exists else use empty list
 3. Append new contact information to list
 4. Encrypt list content with [pubkey]
-5. Store new contactlist value with contentKey = "contactlist", locationKey = hash([username])
+5. Store new contactlist value with contentKey = hash([username]), locationKey = "contactlist"
 
 ### Remove Contact from Contact List
 
@@ -167,7 +179,7 @@
 1. Fetch existing contact list
 3. Remove contact information from list
 4. Encrypt list content with [pubkey]
-5. Store new contactlist value with contentKey = "contactlist", locationKey = hash([username])
+5. Store new contactlist value with contentKey = hash([username]), locationKey = "contactlist"
 
 ## Chat
 
