@@ -347,12 +347,12 @@
 
 >1. Open .iml File with Intelij
 >2. Go to File -> Project structure
->2.1 Set SDK under Plattform settings (JDK < 9)
->2.2 Choose Project SDK under Project Settings -> Project, Project language level: 8
->2.3 Project Settings -> Modules: If nothing exists add and choose the .iml File
->2.4 Add/Edit Run Configuration: 
->Type: Application
->Main class: sample.Main
->Classpath of module: DSA-chat
->JRE: Default
+>3. Set SDK under Plattform settings (JDK < 9)
+>4. Choose Project SDK under Project Settings -> Project, Project language level: 8
+>5. Project Settings -> Modules: If nothing exists add and choose the .iml File
+>6. Add/Edit Run Configuration: 
+>. Type: Application
+>. Main class: sample.Main
+>. Classpath of module: DSA-chat
+>. JRE: Default
 
