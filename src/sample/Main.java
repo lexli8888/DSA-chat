@@ -3,20 +3,14 @@ package sample;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.MenuItem;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import sample.controller.ChatOverviewController;
-import sample.controller.PersonEditDialogController;
-import sample.controller.PersonOverviewController;
-import sample.controller.RootLayoutController;
+import sample.controller.*;
 import sample.model.Chat;
 import sample.model.Message;
 import sample.model.Person;
@@ -30,6 +24,8 @@ public class Main extends Application {
     private BorderPane rootLayout;
     private ObservableList<Person> personData = FXCollections.observableArrayList();
     private ObservableList<Chat> chatsData = FXCollections.observableArrayList();
+    //private ObservableList<Message> messages = FXCollections.observableArrayList();
+    //private ObservableList<Message> messages2 = FXCollections.observableArrayList();
 
     public Main() {
         // Add some sample data
@@ -43,19 +39,32 @@ public class Main extends Application {
         Person mayer = new Person("Stefan", "Mayer");
         Person müller = new Person("Martin", "Müller");
 
+        /*
         // my name's mueller, i'am chatting with kurz
-        Message message1 = new Message("hey", mueller);
-        Message message2 = new Message("hey", kurz);
-        Message message3 = new Message("how are you?", mueller);
-        Message message4 = new Message("good", kurz);
+        Message message11 = new Message("hey", mueller);
+        Message message12 = new Message("hey", kurz);
+        Message message13 = new Message("how are you?", mueller);
+        Message message14 = new Message("good", kurz);
 
-        ArrayList<Message> messages = new ArrayList<>();
-        messages.add(message1);
-        messages.add(message2);
-        messages.add(message3);
-        messages.add(message4);
+        // my name's mueller, i'am chatting with kurz
+        Message message21 = new Message("hey", muster);
+        Message message22 = new Message("moin", mayer);
+        Message message23 = new Message("Wie geht's so?", muster);
+        Message message24 = new Message("gut", mayer);
+
+        messages.add(message11);
+        messages.add(message12);
+        messages.add(message13);
+        messages.add(message14);
+
+        messages2.add(message21);
+        messages2.add(message22);
+        messages2.add(message23);
+        messages2.add(message24);
 
         Chat chat1 = new Chat("Test1",kurz,messages);
+        Chat chat2 = new Chat("Test2",best,messages2);
+        */
 
         personData.add(muster);
         personData.add(mueller);
@@ -67,7 +76,10 @@ public class Main extends Application {
         personData.add(mayer);
         personData.add(müller);
 
+        /*
         chatsData.add(chat1);
+        chatsData.add(chat2);
+        */
     }
 
     public ObservableList<Person> getPersonData() {
@@ -103,7 +115,7 @@ public class Main extends Application {
             controller.setMainApp(this);
 
             primaryStage.setScene(scene);
-
+            primaryStage.setResizable(false);
             primaryStage.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -169,6 +181,38 @@ public class Main extends Application {
             PersonEditDialogController controller = loader.getController();
             controller.setDialogStage(dialogStage);
             controller.setPerson(person);
+
+            // Show the dialog and wait until the user closes it
+            dialogStage.showAndWait();
+
+            return controller.isOkClicked();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean showNewChatDialog(Chat chat){
+        try {
+            // Load the fxml file and create a new stage for the popup dialog.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(Main.class.getResource("view/ChatEditDialog.fxml"));
+            AnchorPane page = (AnchorPane) loader.load();
+
+            // Create the dialog Stage.
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("New Chat");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(primaryStage);
+            Scene scene = new Scene(page);
+            dialogStage.setScene(scene);
+
+            // Set the chat into the controller and Give the controller access to the main app.
+            NewChatDialogController controller = loader.getController();
+            controller.setDialogStage(dialogStage);
+            //controller.setMainApp(this);
+            controller.setChat(chat);
+
 
             // Show the dialog and wait until the user closes it
             dialogStage.showAndWait();

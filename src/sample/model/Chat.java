@@ -2,7 +2,9 @@ package sample.model;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.ObservableList;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -11,14 +13,14 @@ import java.util.ArrayList;
 public class Chat {
 
     private final StringProperty title;
-    private final Person person;
-    private final ArrayList<Message> messages;
+    private Person person;
+    private ObservableList<Message> messages;
 
     public Chat(){
         this(null,null,null);
     }
 
-    public Chat(String title, Person person, ArrayList<Message> messages) {
+    public Chat(String title, Person person, ObservableList<Message> messages) {
         this.title = new SimpleStringProperty(title);
         this.person = person;
         this.messages = messages;
@@ -36,11 +38,19 @@ public class Chat {
         this.title.set(title);
     }
 
-    public ArrayList<Message> getMessages() {
+    public ObservableList<Message> getMessages() {
         return messages;
+    }
+
+    public void setMessages(ObservableList<Message> messages) {
+        this.messages = messages;
     }
 
     public Person getPerson() {
         return person;
+    }
+
+    public void setPerson(Person person) {
+        this.person = person;
     }
 }
