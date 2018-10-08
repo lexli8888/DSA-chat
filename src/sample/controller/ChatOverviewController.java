@@ -38,6 +38,11 @@ public class ChatOverviewController {
     }
 
     @FXML
+    private void handleNewChat(){
+
+    }
+
+    @FXML
     private void handleDeleteChat() {
         int selectedIndex = chatsTable.getSelectionModel().getSelectedIndex();
         if (selectedIndex >= 0) {
