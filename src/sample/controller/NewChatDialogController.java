@@ -1,5 +1,6 @@
 package sample.controller;
 
+import org.controlsfx.control.CheckComboBox;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -21,7 +22,7 @@ import java.util.ArrayList;
 public class NewChatDialogController {
 
     @FXML
-    private ComboBox memberComboBox;
+    private CheckComboBox memberComboBox;
     @FXML
     private TextField titleField;
 
@@ -63,7 +64,6 @@ public class NewChatDialogController {
         this.chat = chat;
         titleField.setText(chat.getTitle());
 
-
         memberComboBox.getItems().addAll(personData);
 
         memberComboBox.setConverter(new StringConverter<Person>() {
@@ -97,7 +97,7 @@ public class NewChatDialogController {
     private void handleOk() {
         if (isInputValid()) {
             chat.setTitle(titleField.getText());
-            chat.setPerson((Person)memberComboBox.getValue());
+            chat.addPersons(memberComboBox.getCheckModel().getCheckedItems());
 
             ObservableList<Message> newMessages = FXCollections.observableArrayList();
             chat.setMessages(newMessages);
@@ -113,7 +113,7 @@ public class NewChatDialogController {
         if (titleField.getText() == null || titleField.getText().length() == 0) {
             errorMessage += "No valid title!\n";
         }
-        if (memberComboBox.getValue() == null ) {
+        if (memberComboBox.getCheckModel().getCheckedItems() == null ) {
             errorMessage += "No valid selection!\n";
         }
 

@@ -4,25 +4,22 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-
 /**
  * Created by a-003-ebr on 01.10.2018.
  */
 public class Chat {
 
     private final StringProperty title;
-    private Person person;
+    private ObservableList<Person> persons;
     private ObservableList<Message> messages;
 
     public Chat(){
         this(null,null,null);
     }
 
-    public Chat(String title, Person person, ObservableList<Message> messages) {
+    public Chat(String title, ObservableList<Person> members, ObservableList<Message> messages) {
         this.title = new SimpleStringProperty(title);
-        this.person = person;
+        this.persons = members;
         this.messages = messages;
     }
 
@@ -46,11 +43,15 @@ public class Chat {
         this.messages = messages;
     }
 
-    public Person getPerson() {
-        return person;
+    public ObservableList<Person> getPersons() {
+        return persons;
     }
 
-    public void setPerson(Person person) {
-        this.person = person;
+    public void addPerson(Person person) {
+        this.persons.add(person);
+    }
+
+    public void addPersons(ObservableList<Person> persons){
+       this.persons.addAll(persons);
     }
 }
