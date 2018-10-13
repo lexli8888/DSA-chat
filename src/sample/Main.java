@@ -15,7 +15,10 @@ import sample.model.Chat;
 import sample.model.Message;
 import sample.model.Person;
 
-import java.io.IOException;
+import java.io.*;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
 public class Main extends Application {
@@ -27,7 +30,33 @@ public class Main extends Application {
     //private ObservableList<Message> messages = FXCollections.observableArrayList();
     //private ObservableList<Message> messages2 = FXCollections.observableArrayList();
 
-    public Main() {
+    public Main() throws NoSuchAlgorithmException {
+
+
+        KeyPairGenerator generator = KeyPairGenerator.getInstance("DSA");
+        KeyPair keyPair = generator.generateKeyPair();
+        Person user = new Person("Alexander", "van Schie", keyPair.getPublic().toString());
+
+        String path = System.getProperty("user.home") + File.separator + "DSA-Chat";
+        File customDir = new File(path);
+        File keyFile = new File(path + File.separator + "key.txt");
+
+        if (keyFile.exists()) {
+            System.out.println(customDir + " already exists");
+        } else if(customDir.mkdirs()){
+            try {
+                BufferedWriter writer = new BufferedWriter(new FileWriter(keyFile));
+                writer.write(user.getFirstName());
+                writer.write(user.getLastName());
+                writer.write(user.getFingerprint());
+                writer.close();
+                keyFile.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            System.out.println(customDir + " was created");
+        }
+
         // Add some sample data
         Person muster = new Person("Hans", "Muster");
         Person mueller = new Person("Ruth", "Mueller");

@@ -11,19 +11,33 @@ public class Person {
 
     private final StringProperty firstName;
     private final StringProperty lastName;
+    private final ReadOnlyStringProperty fingerprint;
     private final StringProperty street;
     private final IntegerProperty postalCode;
     private final StringProperty city;
     private final ObjectProperty<LocalDate> birthday;
 
     public Person(){
-        this(null, null);
+        this(null, null, null);
     }
+
+
 
     public Person(String firstName, String lastName) {
         this.firstName = new SimpleStringProperty(firstName);
         this.lastName = new SimpleStringProperty(lastName);
+        this.fingerprint = new SimpleStringProperty("fake");
+        // Some initial dummy data, just for convenient testing.
+        this.street = new SimpleStringProperty("some street");
+        this.postalCode = new SimpleIntegerProperty(1234);
+        this.city = new SimpleStringProperty("some city");
+        this.birthday = new SimpleObjectProperty<LocalDate>(LocalDate.of(1999, 2, 21));
+    }
 
+    public Person(String firstName, String lastName, String fingerprint) {
+        this.firstName = new SimpleStringProperty(firstName);
+        this.lastName = new SimpleStringProperty(lastName);
+        this.fingerprint = new SimpleStringProperty(fingerprint);
         // Some initial dummy data, just for convenient testing.
         this.street = new SimpleStringProperty("some street");
         this.postalCode = new SimpleIntegerProperty(1234);
@@ -102,4 +116,10 @@ public class Person {
     public ObjectProperty<LocalDate> birthdayProperty() {
         return birthday;
     }
+
+    public String getFingerprint() {
+        return fingerprint.get();
+    }
+
+
 }
