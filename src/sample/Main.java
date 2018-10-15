@@ -30,32 +30,8 @@ public class Main extends Application {
     //private ObservableList<Message> messages = FXCollections.observableArrayList();
     //private ObservableList<Message> messages2 = FXCollections.observableArrayList();
 
-    public Main() throws NoSuchAlgorithmException {
+    public Main()  {
 
-
-        KeyPairGenerator generator = KeyPairGenerator.getInstance("DSA");
-        KeyPair keyPair = generator.generateKeyPair();
-        Person user = new Person("Alexander", "van Schie", keyPair.getPublic().toString());
-
-        String path = System.getProperty("user.home") + File.separator + "DSA-Chat";
-        File customDir = new File(path);
-        File keyFile = new File(path + File.separator + "key.txt");
-
-        if (keyFile.exists()) {
-            System.out.println(customDir + " already exists");
-        } else if(customDir.mkdirs()){
-            try {
-                BufferedWriter writer = new BufferedWriter(new FileWriter(keyFile));
-                writer.write(user.getFirstName());
-                writer.write(user.getLastName());
-                writer.write(user.getFingerprint());
-                writer.close();
-                keyFile.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            System.out.println(customDir + " was created");
-        }
 
         // Add some sample data
         Person muster = new Person("Hans", "Muster");
@@ -124,9 +100,18 @@ public class Main extends Application {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("ChatApp");
 
-        initRootLayout();
-        //showPersonOverview();
-        showChatOverview();
+
+
+        String path = System.getProperty("user.home") + File.separator + "DSA-Chat";
+        File customDir = new File(path);
+        File keyFile = new File(path + File.separator + "key.txt");
+
+        if (keyFile.exists()) {
+            initRootLayout();
+            showChatOverview();
+        } else {
+            showStartupDialog();
+        }
     }
 
     public void initRootLayout() {
@@ -187,6 +172,27 @@ public class Main extends Application {
             controller.setMainApp(this);
 
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void showStartupDialog(){
+        try{
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(Main.class.getResource("view/StartupDialog.fxml"));
+            AnchorPane startupDialog = (AnchorPane) loader.load();
+
+            // Show the scene containing the root layout.
+            Scene scene = new Scene(startupDialog);
+
+            StartupDialogController controller = loader.getController();
+            controller.setMainApp(this);
+
+            primaryStage.setScene(scene);
+            primaryStage.setResizable(false);
+            primaryStage.show();
+        }catch (IOException e){
             e.printStackTrace();
         }
     }
