@@ -6,9 +6,6 @@ import net.tomp2p.dht.PeerDHT;
 import net.tomp2p.peers.Number160;
 import net.tomp2p.storage.Data;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 import java.io.IOException;
 import java.security.*;
 import java.util.ArrayList;
