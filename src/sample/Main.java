@@ -20,6 +20,7 @@ import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Main extends Application {
 
@@ -101,12 +102,13 @@ public class Main extends Application {
         this.primaryStage.setTitle("ChatApp");
 
 
-
         String path = System.getProperty("user.home") + File.separator + "DSA-Chat";
         File customDir = new File(path);
         File keyFile = new File(path + File.separator + "key.txt");
 
         if (keyFile.exists()) {
+            Scanner sc = new Scanner(keyFile);
+            String username = sc.nextLine();
             initRootLayout();
             showChatOverview();
         } else {

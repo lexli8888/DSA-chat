@@ -28,6 +28,9 @@ public class StartupDialogController {
     private TextField LastName;
 
     @FXML
+    private TextField UserName;
+
+    @FXML
     private Label ErrorMsg;
 
 
@@ -41,12 +44,13 @@ public class StartupDialogController {
 
         String firstName = FirstName.getText();
         String lastName = LastName.getText();
+        String userName = UserName.getText();
 
-        if(!firstName.isEmpty() && !lastName.isEmpty()){
+        if(!userName.isEmpty() && !firstName.isEmpty() && !lastName.isEmpty()){
 
             KeyPairGenerator generator = KeyPairGenerator.getInstance("DSA");
             KeyPair keyPair = generator.generateKeyPair();
-            Person user = new Person(FirstName.getText(), LastName.getText(), keyPair.getPublic().toString());
+            Person user = new Person(userName, firstName, lastName, keyPair.getPublic().toString());
 
             String path = System.getProperty("user.home") + File.separator + "DSA-Chat";
             File customDir = new File(path);
@@ -69,8 +73,12 @@ public class StartupDialogController {
             customDir.mkdirs();
             try {
                 BufferedWriter writer = new BufferedWriter(new FileWriter(keyFile));
+                writer.write(user.getUserName());
+                writer.newLine();
                 writer.write(user.getFirstName());
+                writer.newLine();
                 writer.write(user.getLastName());
+                writer.newLine();
                 writer.write(user.getFingerprint());
                 writer.close();
                 keyFile.createNewFile();

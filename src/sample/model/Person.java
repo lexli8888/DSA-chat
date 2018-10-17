@@ -9,6 +9,9 @@ import java.time.LocalDate;
  */
 public class Person {
 
+
+
+    private final StringProperty userName;
     private final StringProperty firstName;
     private final StringProperty lastName;
     private final ReadOnlyStringProperty fingerprint;
@@ -18,12 +21,13 @@ public class Person {
     private final ObjectProperty<LocalDate> birthday;
 
     public Person(){
-        this(null, null, null);
+        this(null,null, null, null);
     }
 
 
 
     public Person(String firstName, String lastName) {
+        this.userName = new SimpleStringProperty("dumbo");
         this.firstName = new SimpleStringProperty(firstName);
         this.lastName = new SimpleStringProperty(lastName);
         this.fingerprint = new SimpleStringProperty("fake");
@@ -34,7 +38,8 @@ public class Person {
         this.birthday = new SimpleObjectProperty<LocalDate>(LocalDate.of(1999, 2, 21));
     }
 
-    public Person(String firstName, String lastName, String fingerprint) {
+    public Person(String username, String firstName, String lastName, String fingerprint) {
+        this.userName = new SimpleStringProperty(username);
         this.firstName = new SimpleStringProperty(firstName);
         this.lastName = new SimpleStringProperty(lastName);
         this.fingerprint = new SimpleStringProperty(fingerprint);
@@ -44,6 +49,9 @@ public class Person {
         this.city = new SimpleStringProperty("some city");
         this.birthday = new SimpleObjectProperty<LocalDate>(LocalDate.of(1999, 2, 21));
     }
+
+    public String getUserName() {return userName.get();}
+    public void setUsername(String userName){this.userName.set(userName);}
 
     public String getFirstName() {
         return firstName.get();
