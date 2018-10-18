@@ -1,21 +1,24 @@
 package sample.controller;
 
+import communication.*;
 import javafx.fxml.FXML;
 import sample.Main;
 import sample.model.Person;
 
 import javafx.scene.control.TextField;
 import javafx.scene.control.Label;
+import sun.security.rsa.RSAPublicKeyImpl;
+
 import java.awt.*;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.NoSuchAlgorithmException;
+import java.security.*;
 
 public class StartupDialogController {
+
+    private ISerializationStrategy serializationStrategy;
 
     private Main mainApp;
 
@@ -36,28 +39,19 @@ public class StartupDialogController {
 
     @FXML
     private void initialize() {
+        serializationStrategy = new JsonSerializationStrategy();
     }
 
 
     @FXML
-    void handleStartup() throws NoSuchAlgorithmException {
+    void handleStartup() throws Exception {
 
         String firstName = FirstName.getText();
         String lastName = LastName.getText();
         String userName = UserName.getText();
 
         if(!userName.isEmpty() && !firstName.isEmpty() && !lastName.isEmpty()){
-
-            KeyPairGenerator generator = KeyPairGenerator.getInstance("DSA");
-            KeyPair keyPair = generator.generateKeyPair();
-            Person user = new Person(userName, firstName, lastName, keyPair.getPublic().toString());
-
-            String path = System.getProperty("user.home") + File.separator + "DSA-Chat";
-            File customDir = new File(path);
-            File keyFile = new File(path + File.separator + "key.txt");
-
-            createKeyFile(user, customDir, keyFile);
-
+            createKeyFile(userName, firstName, lastName);
         } else {
             ErrorMsg.setText("Bitte Vorname und Nachname angeben");
         }
@@ -69,30 +63,36 @@ public class StartupDialogController {
         }
     }
 
-    private void createKeyFile(Person user, File customDir, File keyFile) {
+    private void createKeyFile(String username, String firstname, String lastname) throws NoSuchAlgorithmException {
+
+            KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
+            KeyPair keyPair = generator.generateKeyPair();
+
+            String path = System.getProperty("user.home") + File.separator + "DSA-Chat";
+            File customDir = new File(path);
+
             customDir.mkdirs();
             try {
+                File keyFile = new File(path + File.separator + "key.txt");
                 BufferedWriter writer = new BufferedWriter(new FileWriter(keyFile));
-                writer.write(user.getUserName());
+                writer.write(username);
                 writer.newLine();
-                writer.write(user.getFirstName());
+                writer.write(firstname);
                 writer.newLine();
-                writer.write(user.getLastName());
+                writer.write(lastname);
                 writer.newLine();
-                writer.write(user.getFingerprint());
+                writer.write(serializationStrategy.serialize(keyPair));
                 writer.close();
                 keyFile.createNewFile();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-            System.out.println(customDir + " was created");
+        System.out.println(customDir + " was created");
 
     }
 
     public void setMainApp(Main mainApp) {
         this.mainApp = mainApp;
-
-
     }
 }
 

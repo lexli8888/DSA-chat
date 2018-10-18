@@ -1,5 +1,6 @@
 package sample;
 
+import communication.*;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,14 +13,10 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import sample.controller.*;
 import sample.model.Chat;
-import sample.model.Message;
 import sample.model.Person;
 
 import java.io.*;
 import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main extends Application {
@@ -28,6 +25,8 @@ public class Main extends Application {
     private BorderPane rootLayout;
     private ObservableList<Person> personData = FXCollections.observableArrayList();
     private ObservableList<Chat> chatsData = FXCollections.observableArrayList();
+    private ChatClient client;
+    private ISerializationStrategy serializationStrategy;
     //private ObservableList<Message> messages = FXCollections.observableArrayList();
     //private ObservableList<Message> messages2 = FXCollections.observableArrayList();
 
@@ -101,16 +100,22 @@ public class Main extends Application {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("ChatApp");
 
+        serializationStrategy = new JsonSerializationStrategy();
 
         String path = System.getProperty("user.home") + File.separator + "DSA-Chat";
-        File customDir = new File(path);
         File keyFile = new File(path + File.separator + "key.txt");
 
         if (keyFile.exists()) {
             Scanner sc = new Scanner(keyFile);
             String username = sc.nextLine();
+            String firstName = sc.nextLine();
+            String lastName = sc.nextLine();
+            KeyPair key = serializationStrategy.deserialize(sc.nextLine(), null, KeyPair.class);
+            UserInfo user = UserInfo.New(key.getPublic(), username, firstName, lastName);
+            client = ChatClientFactory.CreateNewClient(key);
+            client.register(user);
             initRootLayout();
-            showChatOverview();
+            showChatOverview(client);
         } else {
             showStartupDialog();
         }
@@ -128,6 +133,7 @@ public class Main extends Application {
 
             // Give the controller access to the main app.
             RootLayoutController controller = loader.getController();
+            controller.setClient(client);
             controller.setMainApp(this);
 
             primaryStage.setScene(scene);
@@ -139,7 +145,7 @@ public class Main extends Application {
     }
 
     @FXML
-    public void showPersonOverview() {
+    public void showPersonOverview(ChatClient client) {
         try {
             // Load person overview.
             FXMLLoader loader = new FXMLLoader();
@@ -151,6 +157,7 @@ public class Main extends Application {
 
             // Give the controller access to the main app.
             PersonOverviewController controller = loader.getController();
+            controller.setClient(client);
             controller.setMainApp(this);
 
         } catch (IOException e) {
@@ -159,7 +166,7 @@ public class Main extends Application {
     }
 
     @FXML
-    public void showChatOverview() {
+    public void showChatOverview(ChatClient client) {
         try {
             // Load person overview.
             FXMLLoader loader = new FXMLLoader();
@@ -171,6 +178,7 @@ public class Main extends Application {
 
             // Give the controller access to the main app.
             ChatOverviewController controller = loader.getController();
+            controller.setClient(client);
             controller.setMainApp(this);
 
         } catch (IOException e) {
@@ -229,7 +237,7 @@ public class Main extends Application {
         }
     }
 
-    public boolean showNewChatDialog(Chat chat){
+    public boolean showNewChatDialog(Chat chat, ChatClient client){
         try {
             // Load the fxml file and create a new stage for the popup dialog.
             FXMLLoader loader = new FXMLLoader();
@@ -247,6 +255,7 @@ public class Main extends Application {
             // Set the chat into the controller and Give the controller access to the main app.
             NewChatDialogController controller = loader.getController();
             controller.setDialogStage(dialogStage);
+            controller.setClient(client);
             //controller.setMainApp(this);
             controller.setChat(chat);
 

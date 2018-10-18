@@ -1,5 +1,6 @@
 package sample.controller;
 
+import communication.ChatClient;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
@@ -31,6 +32,7 @@ public class PersonOverviewController {
     private Label birthdayLabel;
 
     private Main mainApp;
+    private ChatClient client;
 
     public PersonOverviewController() {
     }
@@ -121,4 +123,7 @@ public class PersonOverviewController {
         }
     }
 
+    public void setClient(ChatClient client) {
+        this.client = client;
+    }
 }

@@ -1,5 +1,6 @@
 package sample.controller;
 
+import communication.ChatClient;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
@@ -25,8 +26,13 @@ public class ChatOverviewController {
     private TextArea inputTextArea;
 
     private Main mainApp;
+    private ChatClient client;
 
     public ChatOverviewController() {
+    }
+
+    public void setClient(ChatClient client) {
+        this.client = client;
     }
 
     private void showChatMessages(Chat chat) {
@@ -56,7 +62,7 @@ public class ChatOverviewController {
     @FXML
     private void handleNewChat() {
         Chat tempChat = new Chat();
-        boolean okClicked = mainApp.showNewChatDialog(tempChat);
+        boolean okClicked = mainApp.showNewChatDialog(tempChat, client);
         if (okClicked) {
             mainApp.getChatsData().add(tempChat);
         }
