@@ -35,18 +35,17 @@ public class RootLayoutController {
     @FXML
     private void handleShowChatOverview() {
         System.out.println("Chat");
-        mainApp.showChatOverview(client);
+        mainApp.showChatOverview();
 
     }
 
     @FXML
     private void handleShowAddressBookOverview() {
         System.out.println("Address Book");
-        mainApp.showPersonOverview(client);
+        mainApp.showPersonOverview();
 
     }
 
-    public void setClient(ChatClient client) {
-        this.client = client;
-    }
+
+
 }

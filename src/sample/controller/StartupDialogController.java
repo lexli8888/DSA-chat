@@ -7,6 +7,7 @@ import sample.model.Person;
 
 import javafx.scene.control.TextField;
 import javafx.scene.control.Label;
+import sample.model.UserSetting;
 import sun.security.rsa.RSAPublicKeyImpl;
 
 import java.awt.*;
@@ -68,6 +69,8 @@ public class StartupDialogController {
             KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
             KeyPair keyPair = generator.generateKeyPair();
 
+            UserSetting user = new UserSetting(keyPair, username, firstname, lastname);
+
             String path = System.getProperty("user.home") + File.separator + "DSA-Chat";
             File customDir = new File(path);
 
@@ -75,13 +78,7 @@ public class StartupDialogController {
             try {
                 File keyFile = new File(path + File.separator + "key.txt");
                 BufferedWriter writer = new BufferedWriter(new FileWriter(keyFile));
-                writer.write(username);
-                writer.newLine();
-                writer.write(firstname);
-                writer.newLine();
-                writer.write(lastname);
-                writer.newLine();
-                writer.write(serializationStrategy.serialize(keyPair));
+                writer.write(serializationStrategy.serialize(user));
                 writer.close();
                 keyFile.createNewFile();
             } catch (Exception e) {
