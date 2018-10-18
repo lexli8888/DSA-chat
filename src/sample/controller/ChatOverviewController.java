@@ -1,5 +1,6 @@
 package sample.controller;
 
+import communication.ChatClient;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
@@ -25,8 +26,13 @@ public class ChatOverviewController {
     private TextArea inputTextArea;
 
     private Main mainApp;
+    private ChatClient client;
 
     public ChatOverviewController() {
+    }
+
+    public void setClient(ChatClient client) {
+        this.client = client;
     }
 
     private void showChatMessages(Chat chat) {
@@ -58,7 +64,7 @@ public class ChatOverviewController {
         Chat tempChat = new Chat();
         boolean okClicked = mainApp.showNewChatDialog(tempChat);
         if (okClicked) {
-            mainApp.getChatsData().add(tempChat);
+
         }
     }
 
@@ -81,7 +87,7 @@ public class ChatOverviewController {
                 // I am Ruth Mueller -> logged in user
                 Person mueller = new Person("Ruth", "Mueller");
                 Message msg = new Message(inputTextArea.getText(), mueller);
-                mainApp.getChatsData().get(selectedIndex).getMessages().add(msg);
+
 
                 chatTextArea.appendText(msg.getPerson().getFirstName() + "> " + msg.getText() + "\n");
                 inputTextArea.clear();
@@ -99,8 +105,6 @@ public class ChatOverviewController {
     public void setMainApp(Main mainApp) {
         this.mainApp = mainApp;
 
-        // Add observable list data to the table
-        chatsTable.setItems(mainApp.getChatsData());
 
     }
 

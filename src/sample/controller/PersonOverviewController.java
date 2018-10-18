@@ -1,5 +1,6 @@
 package sample.controller;
 
+import communication.ChatClient;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
@@ -31,6 +32,7 @@ public class PersonOverviewController {
     private Label birthdayLabel;
 
     private Main mainApp;
+    private ChatClient client;
 
     public PersonOverviewController() {
     }
@@ -70,8 +72,6 @@ public class PersonOverviewController {
     public void setMainApp(Main mainApp) {
         this.mainApp = mainApp;
 
-        // Add observable list data to the table
-        personTable.setItems(mainApp.getPersonData());
     }
 
     @FXML
@@ -94,9 +94,9 @@ public class PersonOverviewController {
     @FXML
     private void handleNewPerson() {
         Person tempPerson = new Person();
-        boolean okClicked = mainApp.showPersonEditDialog(tempPerson);
+        boolean okClicked = mainApp.addNewContactDialog();
         if (okClicked) {
-            mainApp.getPersonData().add(tempPerson);
+
         }
     }
 
@@ -104,7 +104,7 @@ public class PersonOverviewController {
     private void handleEditPerson() {
         Person selectedPerson = personTable.getSelectionModel().getSelectedItem();
         if (selectedPerson != null) {
-            boolean okClicked = mainApp.showPersonEditDialog(selectedPerson);
+            boolean okClicked = mainApp.addNewContactDialog();
             if (okClicked) {
                 showPersonDetails(selectedPerson);
             }
@@ -121,4 +121,7 @@ public class PersonOverviewController {
         }
     }
 
+    public void setClient(ChatClient client) {
+        this.client = client;
+    }
 }

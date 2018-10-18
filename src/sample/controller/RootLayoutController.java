@@ -1,6 +1,6 @@
 package sample.controller;
 
-import javafx.event.ActionEvent;
+import communication.ChatClient;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import sample.Main;
@@ -11,6 +11,7 @@ import sample.Main;
 public class RootLayoutController {
 
     private Main mainApp;
+    private ChatClient client;
 
     public void setMainApp(Main mainApp) {
         this.mainApp = mainApp;
@@ -44,5 +45,7 @@ public class RootLayoutController {
         mainApp.showPersonOverview();
 
     }
+
+
 
 }

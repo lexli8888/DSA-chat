@@ -1,5 +1,6 @@
 package sample;
 
+import communication.*;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,14 +13,12 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import sample.controller.*;
 import sample.model.Chat;
-import sample.model.Message;
 import sample.model.Person;
+import sample.model.UserSetting;
 
 import java.io.*;
 import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Main extends Application {
 
@@ -27,35 +26,16 @@ public class Main extends Application {
     private BorderPane rootLayout;
     private ObservableList<Person> personData = FXCollections.observableArrayList();
     private ObservableList<Chat> chatsData = FXCollections.observableArrayList();
+
+    private ContactList contactList;
+    private ChatList chatList;
+    private ChatClient client;
+    private ISerializationStrategy serializationStrategy;
     //private ObservableList<Message> messages = FXCollections.observableArrayList();
     //private ObservableList<Message> messages2 = FXCollections.observableArrayList();
 
-    public Main() throws NoSuchAlgorithmException {
+    public Main()  {
 
-
-        KeyPairGenerator generator = KeyPairGenerator.getInstance("DSA");
-        KeyPair keyPair = generator.generateKeyPair();
-        Person user = new Person("Alexander", "van Schie", keyPair.getPublic().toString());
-
-        String path = System.getProperty("user.home") + File.separator + "DSA-Chat";
-        File customDir = new File(path);
-        File keyFile = new File(path + File.separator + "key.txt");
-
-        if (keyFile.exists()) {
-            System.out.println(customDir + " already exists");
-        } else if(customDir.mkdirs()){
-            try {
-                BufferedWriter writer = new BufferedWriter(new FileWriter(keyFile));
-                writer.write(user.getFirstName());
-                writer.write(user.getLastName());
-                writer.write(user.getFingerprint());
-                writer.close();
-                keyFile.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            System.out.println(customDir + " was created");
-        }
 
         // Add some sample data
         Person muster = new Person("Hans", "Muster");
@@ -68,32 +48,6 @@ public class Main extends Application {
         Person mayer = new Person("Stefan", "Mayer");
         Person müller = new Person("Martin", "Müller");
 
-        /*
-        // my name's mueller, i'am chatting with kurz
-        Message message11 = new Message("hey", mueller);
-        Message message12 = new Message("hey", kurz);
-        Message message13 = new Message("how are you?", mueller);
-        Message message14 = new Message("good", kurz);
-
-        // my name's mueller, i'am chatting with kurz
-        Message message21 = new Message("hey", muster);
-        Message message22 = new Message("moin", mayer);
-        Message message23 = new Message("Wie geht's so?", muster);
-        Message message24 = new Message("gut", mayer);
-
-        messages.add(message11);
-        messages.add(message12);
-        messages.add(message13);
-        messages.add(message14);
-
-        messages2.add(message21);
-        messages2.add(message22);
-        messages2.add(message23);
-        messages2.add(message24);
-
-        Chat chat1 = new Chat("Test1",kurz,messages);
-        Chat chat2 = new Chat("Test2",best,messages2);
-        */
 
         personData.add(muster);
         personData.add(mueller);
@@ -105,28 +59,40 @@ public class Main extends Application {
         personData.add(mayer);
         personData.add(müller);
 
-        /*
-        chatsData.add(chat1);
-        chatsData.add(chat2);
-        */
+
     }
 
-    public ObservableList<Person> getPersonData() {
-        return personData;
+    public ContactList getContactList() {
+        return contactList;
     }
 
-    public ObservableList<Chat> getChatsData() {
-        return chatsData;
-    }
+    public ChatList getChatList() { return chatList; }
+
+    public ChatClient getChatClient(){return client;}
+
 
     @Override
     public void start(Stage primaryStage) throws Exception{
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("ChatApp");
 
-        initRootLayout();
-        //showPersonOverview();
-        showChatOverview();
+        serializationStrategy = new JsonSerializationStrategy();
+
+        String path = System.getProperty("user.home") + File.separator + "DSA-Chat";
+        File keyFile = new File(path + File.separator + "key.txt");
+
+        if (keyFile.exists()) {
+            Scanner sc = new Scanner(keyFile);
+            UserSetting userSetting = serializationStrategy.deserialize(sc.nextLine(), null, UserSetting.class);
+            client = new ChatClient();
+            client.login(userSetting.getUsername(), userSetting.getKeyPair());
+            contactList = client.getContactList();
+            chatList = client.getChatList();
+            initRootLayout();
+            showChatOverview();
+        } else {
+            showStartupDialog();
+        }
     }
 
     public void initRootLayout() {
@@ -164,6 +130,7 @@ public class Main extends Application {
 
             // Give the controller access to the main app.
             PersonOverviewController controller = loader.getController();
+            controller.setClient(client);
             controller.setMainApp(this);
 
         } catch (IOException e) {
@@ -191,11 +158,32 @@ public class Main extends Application {
         }
     }
 
-    public boolean showPersonEditDialog(Person person) {
+    @FXML
+    public void showStartupDialog(){
+        try{
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(Main.class.getResource("view/StartupDialog.fxml"));
+            AnchorPane startupDialog = (AnchorPane) loader.load();
+
+            // Show the scene containing the root layout.
+            Scene scene = new Scene(startupDialog);
+
+            StartupDialogController controller = loader.getController();
+            controller.setMainApp(this);
+
+            primaryStage.setScene(scene);
+            primaryStage.setResizable(false);
+            primaryStage.show();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    public boolean addNewContactDialog() {
         try {
             // Load the fxml file and create a new stage for the popup dialog.
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Main.class.getResource("view/PersonEditDialog.fxml"));
+            loader.setLocation(Main.class.getResource("view/AddNewContact.fxml"));
             AnchorPane page = (AnchorPane) loader.load();
 
             // Create the dialog Stage.
@@ -207,9 +195,9 @@ public class Main extends Application {
             dialogStage.setScene(scene);
 
             // Set the person into the controller.
-            PersonEditDialogController controller = loader.getController();
+            AddNewContactController controller = loader.getController();
+            controller.setMainApp(this);
             controller.setDialogStage(dialogStage);
-            controller.setPerson(person);
 
             // Show the dialog and wait until the user closes it
             dialogStage.showAndWait();
@@ -239,7 +227,7 @@ public class Main extends Application {
             // Set the chat into the controller and Give the controller access to the main app.
             NewChatDialogController controller = loader.getController();
             controller.setDialogStage(dialogStage);
-            //controller.setMainApp(this);
+            controller.setMainApp(this);
             controller.setChat(chat);
 
 

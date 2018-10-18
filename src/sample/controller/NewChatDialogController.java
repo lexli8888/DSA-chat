@@ -1,5 +1,6 @@
 package sample.controller;
 
+import communication.ChatClient;
 import org.controlsfx.control.CheckComboBox;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -28,7 +29,8 @@ public class NewChatDialogController {
 
     private Stage dialogStage;
     private Chat chat;
-    //private Main mainApp;
+    private ChatClient client;
+    private Main mainApp;
     private boolean okClicked = false;
     private ObservableList<Person> personData = FXCollections.observableArrayList();
 
@@ -133,4 +135,12 @@ public class NewChatDialogController {
         }
     }
 
+    public void setClient(ChatClient client) {
+        this.client = client;
+    }
+
+    public void setMainApp(Main mainApp) {
+        this.mainApp = mainApp;
+
+    }
 }
