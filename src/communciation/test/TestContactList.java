@@ -5,6 +5,8 @@ import communication.ContactList;
 import communication.UserInfo;
 import org.junit.jupiter.api.Test;
 
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +21,7 @@ public class TestContactList {
 
         ChatClient client1 = clients.get(0);
 
-        ContactList contactList = client1.getContactList("pascal", client1.getKeyPair());
+        ContactList contactList = client1.getContactList();
         assertEquals(0, contactList.getContacts().size());
     }
 
@@ -27,18 +29,26 @@ public class TestContactList {
     @Test
     public void testStoreAndGetContactList() throws Exception {
         List<ChatClient> clients = ChatClientTestHelper.getClients(2);
-        String username = "elias";
+
+
+        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+        KeyPair keyPair = keyPairGenerator.generateKeyPair();
+
         ChatClient client1 = clients.get(0);
 
         ContactList contactList = new ContactList();
         List<UserInfo> contacts = new ArrayList<>();
-        contacts.add(UserInfo.New("alex", "Alexander", "van Schie"));
+        contacts.add(UserInfo.New(keyPair.getPublic(), "alex", "Alexander", "van Schie"));
         contactList.setContacts(contacts);
 
-        assertTrue(client1.saveContactList(username, client1.getKeyPair(), contactList));
+        assertTrue(client1.saveContactList(contactList));
 
-        ContactList fetchedContactList = client1.getContactList(username, client1.getKeyPair());
+        ContactList fetchedContactList = client1.getContactList();
 
         assertEquals(contactList.getContacts().size(), fetchedContactList.getContacts().size());
+        assertEquals(contactList.getContacts().get(0).getUsername(), fetchedContactList.getContacts().get(0).getUsername());
+        assertEquals(contactList.getContacts().get(0).getFirstName(), fetchedContactList.getContacts().get(0).getFirstName());
+        assertEquals(contactList.getContacts().get(0).getLastName(), fetchedContactList.getContacts().get(0).getLastName());
+        assertEquals(contactList.getContacts().get(0).getPublicKeySignature(), fetchedContactList.getContacts().get(0).getPublicKeySignature());
     }
 }

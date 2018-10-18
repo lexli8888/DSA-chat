@@ -16,11 +16,11 @@ import java.util.List;
 public class PeerDHTUtil {
 
 
-    public static boolean putData(PeerDHT peer, KeyPair protection, String locationKey, String contentKey, String data, Integer ttl) throws IOException {
+    public static boolean putData(PeerDHT peer, KeyPair protection, String locationKey, String contentKey, String data, Integer ttlSeconds) throws IOException {
         Data putData = new Data(data);
 
-        if (ttl != null) {
-            putData.ttlSeconds(ttl);
+        if (ttlSeconds != null) {
+            putData.ttlSeconds(ttlSeconds);
         }
 
         putData.protectEntry(protection);
@@ -39,9 +39,9 @@ public class PeerDHTUtil {
         return put.isSuccess();
     }
 
-    public static boolean putEncryptedData(PeerDHT peer, KeyPair protection, PublicKey encryptionKey, String locationKey, String contentKey, String data, Integer ttl) throws Exception {
+    public static boolean putEncryptedData(PeerDHT peer, KeyPair protection, PublicKey encryptionKey, String locationKey, String contentKey, String data, Integer ttlSeconds) throws Exception {
         String encryptedData = EncryptionUtil.encryptData(encryptionKey, data);
-        return putData(peer, protection, locationKey, contentKey, encryptedData, ttl);
+        return putData(peer, protection, locationKey, contentKey, encryptedData, ttlSeconds);
     }
 
     public static String getEncryptedData(PeerDHT peer, KeyPair keyPair, String locationKey, String contentKey) throws Exception {
@@ -67,6 +67,7 @@ public class PeerDHTUtil {
         Number160 locationKeyNo = Number160.createHash(locationKey);
 
         FutureGet futureGet = peer.get(locationKeyNo)
+                .all()
                 .start();
         futureGet.awaitUninterruptibly();
 

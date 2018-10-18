@@ -24,11 +24,6 @@ public class UserInfo {
         return info;
     }
 
-    public static UserInfo New(String username, String firstName, String lastName) throws NoSuchAlgorithmException {
-        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
-        return UserInfo.New(keyPairGenerator.generateKeyPair().getPublic(), username, firstName, lastName);
-    }
-
     @JsonIgnore
     public String getPublicKeySignature() throws NoSuchAlgorithmException {
         return EncryptionUtil.getKeySignature(publicKey);

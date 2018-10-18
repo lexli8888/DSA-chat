@@ -1,7 +1,7 @@
 package communciation.test;
 
 import communication.ChatClient;
-import communication.ChatClientFactory;
+import communication.UserInfo;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -15,7 +15,13 @@ public class ChatClientTestHelper {
 
         for (int i = 0; i < amount; i++) {
             KeyPair key = keyGenerator.generateKeyPair();
-            ChatClient client = ChatClientFactory.CreateNewClient(key);
+            ChatClient client = new ChatClient();
+            String username = "user" + i;
+            UserInfo info = UserInfo.New(key.getPublic(), username, "first " + i, "last " + i);
+            if (!client.register(info, key)) {
+                throw new Exception("could not register client");
+            }
+
             if (i > 0) {
                 client.discoverClient(clients.get(0));
             }

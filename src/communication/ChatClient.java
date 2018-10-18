@@ -4,6 +4,7 @@ import net.tomp2p.dht.PeerDHT;
 import net.tomp2p.futures.FutureBootstrap;
 import net.tomp2p.peers.PeerAddress;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.security.KeyPair;
@@ -13,16 +14,23 @@ import java.util.UUID;
 
 
 public class ChatClient {
-    private ISerializationStrategy serializationStrategy;
+    private static ISerializationStrategy serializationStrategy = new JsonSerializationStrategy();
 
     final private PeerDHT peer;
-    final private KeyPair keyPair;
 
-    public ChatClient(PeerDHT peer, KeyPair keyPair) {
+    private KeyPair keyPair;
+    private String username;
+
+    public ChatClient() throws IOException {
+        this.peer = PeerDHTFactory.CreatePeer();
+    }
+
+    public ChatClient(PeerDHT peer) {
         this.peer = peer;
-        this.keyPair = keyPair;
+    }
 
-        this.serializationStrategy = new JsonSerializationStrategy();
+    public String getUsername() {
+        return username;
     }
 
     public KeyPair getKeyPair() {
@@ -58,55 +66,100 @@ public class ChatClient {
         }
     }
 
+    public void discoverOnCloud() throws UnknownHostException {
+        discoverOnInet("p2p.apps.bertschi.io", 4000);
+    }
+
+    public boolean sendMessage(ChatInfo chat, ChatMessage message) throws Exception {
+        String locationKey = chat.getId() + "-messages";
+        String contentKey = message.getId();
+        String data = serializationStrategy.serialize(message);
+
+        return PeerDHTUtil.putEncryptedData(peer, keyPair, chat.getKeyPair().getPublic(),
+                locationKey, contentKey, data, 60 * 60 * 24 * 7); // 7 days
+    }
+
+    public List<ChatMessage> getMessages(ChatInfo chat) throws Exception {
+        String locationKey = chat.getId() + "-messages";
+        List<String> data = PeerDHTUtil.getEncryptedData(peer, chat.getKeyPair(), locationKey);
+        List<ChatMessage> messages = new ArrayList<>();
+        for(String item : data) {
+            messages.add(serializationStrategy.deserialize(item, null, ChatMessage.class));
+        }
+        return messages;
+    }
+
+    public boolean setOnlineStatus(String status) throws IOException {
+        return PeerDHTUtil.putData(this.peer, keyPair, username,
+                "onlinestatus", status, 60 * 5); // 5 minutes
+    }
+
+    public String getOnlineStatus(String username) throws IOException, ClassNotFoundException {
+        return PeerDHTUtil.getData(this.peer, username, "onlinestatus");
+    }
 
     public boolean createChat(ChatInfo chat) throws Exception {
         String data = serializationStrategy.serialize(chat);
-        return PeerDHTUtil.putEncryptedData(this.peer, this.keyPair, chat.getKeyPair().getPublic(),
+        return PeerDHTUtil.putEncryptedData(this.peer, chat.getKeyPair(), chat.getKeyPair().getPublic(),
                 chat.getId(), "chat", data, null);
     }
 
     public boolean inviteChatMember(ChatInfo chat, UserInfo user) throws Exception {
         String locationKey = user.getUsername() + "-invite";
         String data = serializationStrategy.serialize(chat);
-        return PeerDHTUtil.putEncryptedData(this.peer, this.keyPair, user.getPublic(),
-                locationKey, UUID.randomUUID().toString(), data, 60 * 60 * 24 * 7);
+        return PeerDHTUtil.putEncryptedData(this.peer, keyPair, user.getPublic(),
+                locationKey, UUID.randomUUID().toString(), data, 60 * 60 * 24 * 7); // 7 days
     }
 
-    public List<ChatInfo> getChatInvites(String username, KeyPair keyPair) throws Exception {
+    public List<ChatInfo> getChatInvites() throws Exception {
         String locationKey = username + "-invite";
         List<String> data = PeerDHTUtil.getEncryptedData(this.peer, keyPair, locationKey);
         List<ChatInfo> chats = new ArrayList<>();
-        for(String item : data) {
+        for (String item : data) {
             chats.add(serializationStrategy.deserialize(item, null, ChatInfo.class));
         }
         return chats;
     }
 
-    public ChatList getChatList(String username, KeyPair keyPair) throws Exception {
-        String data = PeerDHTUtil.getEncryptedData(this.peer, this.keyPair, username, "chatlist");
+    public ChatList getChatList() throws Exception {
+        String data = PeerDHTUtil.getEncryptedData(peer, keyPair, username, "chatlist");
         return serializationStrategy.deserialize(data, new ChatList(), ChatList.class);
     }
 
-    public boolean saveChatList(String username, KeyPair keyPair, ChatList chatList) throws Exception {
+    public boolean saveChatList(ChatList chatList) throws Exception {
         String data = serializationStrategy.serialize(chatList);
-        return PeerDHTUtil.putEncryptedData(this.peer, this.keyPair, this.keyPair.getPublic(),
+        return PeerDHTUtil.putEncryptedData(this.peer, keyPair, this.keyPair.getPublic(),
                 username, "chatlist", data, null);
     }
 
-    public boolean saveContactList(String username, KeyPair keyPair, ContactList contactList) throws Exception {
+    public boolean saveContactList(ContactList contactList) throws Exception {
         String data = serializationStrategy.serialize(contactList);
-        return PeerDHTUtil.putEncryptedData(this.peer, this.keyPair, this.keyPair.getPublic(),
+        return PeerDHTUtil.putEncryptedData(this.peer, keyPair, this.keyPair.getPublic(),
                 username, "contactlist", data, null);
     }
 
-    public ContactList getContactList(String username, KeyPair keyPair) throws Exception {
-        String data = PeerDHTUtil.getEncryptedData(this.peer, this.keyPair, username, "contactlist");
+    public ContactList getContactList() throws Exception {
+        String data = PeerDHTUtil.getEncryptedData(this.peer, keyPair, username, "contactlist");
         return serializationStrategy.deserialize(data, new ContactList(), ContactList.class);
     }
 
-    public boolean register(UserInfo userInfo) throws Exception {
+    public void login(String username, KeyPair keyPair) {
+        this.username = username;
+        this.keyPair = keyPair;
+        this.peer.peer().peerBean().keyPair(keyPair);
+    }
+
+    public boolean register(UserInfo userInfo, KeyPair keyPair) throws Exception {
         String data = serializationStrategy.serialize(userInfo);
-        return PeerDHTUtil.putData(this.peer, this.keyPair, userInfo.getUsername(), "user", data, null);
+
+        this.peer.peer().peerBean().keyPair(keyPair);
+
+        boolean result = PeerDHTUtil.putData(peer, keyPair, userInfo.getUsername(), "user", data, null);
+        if (result) {
+            this.username = userInfo.getUsername();
+            this.keyPair = keyPair;
+        }
+        return result;
     }
 
     public UserInfo getUserInfo(String username) throws Exception {

@@ -17,7 +17,7 @@ public class TestChatList {
 
         ChatClient client1 = clients.get(0);
 
-        ChatList chatList = client1.getChatList("pascal", client1.getKeyPair());
+        ChatList chatList = client1.getChatList();
         assertEquals(0, chatList.getChats().size());
     }
 
@@ -25,7 +25,7 @@ public class TestChatList {
     @Test
     public void testStoreAndGetContactList() throws Exception {
         List<ChatClient> clients = ChatClientTestHelper.getClients(2);
-        String username = "elias";
+
         ChatClient client1 = clients.get(0);
 
         ChatList chatList = new ChatList();
@@ -34,9 +34,9 @@ public class TestChatList {
         chats.add(chat);
         chatList.setChats(chats);
 
-        assertTrue(client1.saveChatList(username, client1.getKeyPair(), chatList));
+        assertTrue(client1.saveChatList(chatList));
 
-        ChatList fetchedChatList = client1.getChatList(username, client1.getKeyPair());
+        ChatList fetchedChatList = client1.getChatList();
 
         assertEquals(chatList.getChats().size(), fetchedChatList.getChats().size());
 

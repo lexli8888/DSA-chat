@@ -4,6 +4,8 @@ import communication.ChatClient;
 import communication.UserInfo;
 import org.junit.jupiter.api.Test;
 
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -17,12 +19,14 @@ public class TestRegister {
         List<ChatClient> clients = ChatClientTestHelper.getClients(2);
 
         ChatClient client1 = clients.get(0);
-        ChatClient client2 = clients.get(1);
 
-        UserInfo registrationInfo = UserInfo.New(client1.getKeyPair().getPublic(), "pascal", "Pascal", "Bertschi");
-        assertTrue(client1.register(registrationInfo));
+        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+        KeyPair keyPair = keyPairGenerator.generateKeyPair();
+        UserInfo registrationInfo = UserInfo.New(keyPair.getPublic(), "pascal", "Pascal", "Bertschi");
 
-        UserInfo fetchInfo = client2.getUserInfo("pascal");
+        assertTrue(client1.register(registrationInfo, keyPair));
+
+        UserInfo fetchInfo = client1.getUserInfo("pascal");
 
         assertEquals(fetchInfo.getUsername(), registrationInfo.getUsername());
         assertEquals(fetchInfo.getFirstName(), registrationInfo.getFirstName());
@@ -39,11 +43,16 @@ public class TestRegister {
         ChatClient client1 = clients.get(0);
         ChatClient client2 = clients.get(1);
 
-        UserInfo firstRegistrationInfo = UserInfo.New(client1.getKeyPair().getPublic(), commonUserName, "Pascal", "Bertschi");
-        assertTrue(client1.register(firstRegistrationInfo));
 
-        UserInfo secondRegistrationInfo = UserInfo.New(client2.getKeyPair().getPublic(), commonUserName, "Alexander", "van Schie");
-        assertFalse(client2.register(secondRegistrationInfo));
+        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+        KeyPair keyPair1 = keyPairGenerator.generateKeyPair();
+        KeyPair keyPair2 = keyPairGenerator.generateKeyPair();
+
+        UserInfo firstRegistrationInfo = UserInfo.New(keyPair1.getPublic(), commonUserName, "Pascal", "Bertschi");
+        assertTrue(client1.register(firstRegistrationInfo, keyPair1));
+
+        UserInfo secondRegistrationInfo = UserInfo.New(keyPair2.getPublic(), commonUserName, "Alexander", "van Schie");
+        assertFalse(client2.register(secondRegistrationInfo, keyPair2));
 
         UserInfo firstFetchInfo = client1.getUserInfo(commonUserName);
         UserInfo secondFetchInfo = client2.getUserInfo(commonUserName);
