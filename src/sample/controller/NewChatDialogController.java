@@ -135,12 +135,9 @@ public class NewChatDialogController {
         }
     }
 
-    public void setClient(ChatClient client) {
-        this.client = client;
-    }
 
     public void setMainApp(Main mainApp) {
         this.mainApp = mainApp;
-
+        this.client = mainApp.getChatClient();
     }
 }

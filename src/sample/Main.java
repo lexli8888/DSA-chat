@@ -130,7 +130,6 @@ public class Main extends Application {
 
             // Give the controller access to the main app.
             PersonOverviewController controller = loader.getController();
-            controller.setClient(client);
             controller.setMainApp(this);
 
         } catch (IOException e) {
@@ -203,7 +202,7 @@ public class Main extends Application {
             dialogStage.showAndWait();
 
             return controller.isOkClicked();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }

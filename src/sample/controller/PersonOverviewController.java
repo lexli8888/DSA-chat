@@ -71,7 +71,7 @@ public class PersonOverviewController {
 
     public void setMainApp(Main mainApp) {
         this.mainApp = mainApp;
-
+        this.client = mainApp.getChatClient();
     }
 
     @FXML
@@ -121,7 +121,4 @@ public class PersonOverviewController {
         }
     }
 
-    public void setClient(ChatClient client) {
-        this.client = client;
-    }
 }

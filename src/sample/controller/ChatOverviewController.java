@@ -31,10 +31,6 @@ public class ChatOverviewController {
     public ChatOverviewController() {
     }
 
-    public void setClient(ChatClient client) {
-        this.client = client;
-    }
-
     private void showChatMessages(Chat chat) {
         if (chat != null && chat.getMessages() != null) {
             chatTextArea.clear();
@@ -104,7 +100,7 @@ public class ChatOverviewController {
 
     public void setMainApp(Main mainApp) {
         this.mainApp = mainApp;
-
+        this.client = mainApp.getChatClient();
 
     }
 
