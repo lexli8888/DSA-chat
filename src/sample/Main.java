@@ -17,7 +17,6 @@ import sample.model.Person;
 import sample.model.UserSetting;
 
 import java.io.*;
-import java.security.KeyPair;
 import java.util.Scanner;
 
 public class Main extends Application {
@@ -31,8 +30,6 @@ public class Main extends Application {
     private ChatList chatList;
     private ChatClient client;
     private ISerializationStrategy serializationStrategy;
-    //private ObservableList<Message> messages = FXCollections.observableArrayList();
-    //private ObservableList<Message> messages2 = FXCollections.observableArrayList();
 
     public Main()  {
 
@@ -208,7 +205,7 @@ public class Main extends Application {
         }
     }
 
-    public boolean showNewChatDialog(Chat chat){
+    public boolean addNewChatDialog(){
         try {
             // Load the fxml file and create a new stage for the popup dialog.
             FXMLLoader loader = new FXMLLoader();
@@ -224,10 +221,9 @@ public class Main extends Application {
             dialogStage.setScene(scene);
 
             // Set the chat into the controller and Give the controller access to the main app.
-            NewChatDialogController controller = loader.getController();
+            AddNewChatController controller = loader.getController();
             controller.setDialogStage(dialogStage);
             controller.setMainApp(this);
-            controller.setChat(chat);
 
 
             // Show the dialog and wait until the user closes it

@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 
 <?import org.controlsfx.control.CheckComboBox?>
-<AnchorPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="sample.controller.NewChatDialogController" prefHeight="155.0" prefWidth="465.0">
+<AnchorPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="sample.controller.AddNewChatController" prefHeight="155.0" prefWidth="465.0">
     <children>
         <GridPane layoutX="144.0" layoutY="72.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
             <columnConstraints>

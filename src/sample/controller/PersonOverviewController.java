@@ -80,7 +80,6 @@ public class PersonOverviewController {
 
     @FXML
     private void handleNewPerson() {
-        Person tempPerson = new Person();
         boolean okClicked = mainApp.addNewContactDialog();
         if (okClicked) {
 
