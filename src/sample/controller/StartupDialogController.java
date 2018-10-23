@@ -54,6 +54,8 @@ public class StartupDialogController {
         String lastName = LastName.getText();
         String userName = UserName.getText();
 
+
+
         if(!userName.isEmpty() && !firstName.isEmpty() && !lastName.isEmpty()){
             KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
             KeyPair keyPair = generator.generateKeyPair();

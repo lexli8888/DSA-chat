@@ -31,8 +31,9 @@ public class Main extends Application {
     private ChatClient client;
     private ISerializationStrategy serializationStrategy;
 
-    public Main()  {
+    public Main() throws IOException {
 
+        client = new ChatClient();
 
         // Add some sample data
         Person muster = new Person("Hans", "Muster");
@@ -81,7 +82,6 @@ public class Main extends Application {
         if (keyFile.exists()) {
             Scanner sc = new Scanner(keyFile);
             UserSetting userSetting = serializationStrategy.deserialize(sc.nextLine(), null, UserSetting.class);
-            client = new ChatClient();
             client.login(userSetting.getUsername(), userSetting.getKeyPair());
             contactList = client.getContactList();
             chatList = client.getChatList();
