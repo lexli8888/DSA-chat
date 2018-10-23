@@ -23,7 +23,7 @@ public class StartupDialogController {
 
     private Main mainApp;
 
-    private ChatClient client = new ChatClient();
+    private ChatClient client;
 
     public StartupDialogController() throws IOException {}
 
@@ -41,8 +41,9 @@ public class StartupDialogController {
 
 
     @FXML
-    private void initialize() {
+    private void initialize() throws IOException{
         serializationStrategy = new JsonSerializationStrategy();
+        client = new ChatClient();
     }
 
 
