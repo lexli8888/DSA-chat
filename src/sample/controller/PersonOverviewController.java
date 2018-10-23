@@ -2,6 +2,7 @@ package sample.controller;
 
 import communication.ChatClient;
 import communication.UserInfo;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
@@ -48,6 +49,7 @@ public class PersonOverviewController {
     @FXML
     private void initialize() {
         // Initialize the person table with the two columns.
+        userNameColumn.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getUsername()));
         //firstNameColumn.setCellValueFactory(cellData -> cellData.getValue().firstNameProperty());
         //lastNameColumn.setCellValueFactory(cellData -> cellData.getValue().lastNameProperty());
 
