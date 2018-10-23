@@ -23,7 +23,7 @@ public class StartupDialogController {
 
     private Main mainApp;
 
-    private ChatClient client = new ChatClient();
+    private ChatClient client;
 
     public StartupDialogController() throws IOException {}
 
@@ -52,6 +52,8 @@ public class StartupDialogController {
         String firstName = FirstName.getText();
         String lastName = LastName.getText();
         String userName = UserName.getText();
+
+
 
         if(!userName.isEmpty() && !firstName.isEmpty() && !lastName.isEmpty()){
             KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
