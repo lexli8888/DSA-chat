@@ -43,7 +43,6 @@ public class StartupDialogController {
     @FXML
     private void initialize() throws IOException{
         serializationStrategy = new JsonSerializationStrategy();
-        client = new ChatClient();
     }
 
 
