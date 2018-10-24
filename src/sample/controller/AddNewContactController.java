@@ -33,14 +33,12 @@ public class AddNewContactController {
         this.dialogStage = dialogStage;
     }
 
-
-
     public boolean isOkClicked() {
         return okClicked;
     }
 
     @FXML
-    private void handleOk() throws Exception {
+    private void handleOk() {
         if (isInputValid()) {
             okClicked = true;
             dialogStage.close();

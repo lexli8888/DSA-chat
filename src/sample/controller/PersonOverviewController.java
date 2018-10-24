@@ -14,6 +14,8 @@ import sample.Main;
 import sample.model.Person;
 import sample.util.DateUtil;
 
+import java.util.List;
+
 public class PersonOverviewController {
     @FXML
     private TableView<UserInfo> personTable;
@@ -38,13 +40,11 @@ public class PersonOverviewController {
 
     private void showPersonDetails(UserInfo user) {
         if (user != null) {
-            // Fill the labels with info from the person object.
             userNameLabel.setText(user.getUsername());
             firstNameLabel.setText(user.getFirstName());
             lastNameLabel.setText(user.getLastName());
 
         } else {
-            // Person is null, remove all the text.
             userNameLabel.setText("");
             firstNameLabel.setText("");
             lastNameLabel.setText("");       }
@@ -54,24 +54,26 @@ public class PersonOverviewController {
     private void initialize() {
         // Initialize the person table with the two columns.
         userNameColumn.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getUsername()));
-        //firstNameColumn.setCellValueFactory(cellData -> cellData.getValue().firstNameProperty());
-        //lastNameColumn.setCellValueFactory(cellData -> cellData.getValue().lastNameProperty());
-
         showPersonDetails(null);
-
         personTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> showPersonDetails(newValue));
     }
 
-    public void setMainApp(Main mainApp) throws Exception {
+    public void setMainApp(Main mainApp)  {
         this.mainApp = mainApp;
         this.client = mainApp.getChatClient();
+        this.contactList = mainApp.getContactList();
         personTable.setItems(mainApp.getContactList().getContactsAsObservableList());
     }
 
     @FXML
-    private void handleDeletePerson() {
+    private void handleDeletePerson() throws Exception {
         int selectedIndex = personTable.getSelectionModel().getSelectedIndex();
         if (selectedIndex >= 0) {
+            List<UserInfo> contacts = contactList.getContactsAsList();
+            UserInfo userToRemove = personTable.getItems().get(selectedIndex);
+            contacts.remove(userToRemove);
+            contactList.setContacts(contacts);
+            client.saveContactList(contactList);
             personTable.getItems().remove(selectedIndex);
         } else {
             // Nothing selected.
@@ -89,7 +91,13 @@ public class PersonOverviewController {
     private void handleNewPerson() {
         boolean okClicked = mainApp.addNewContactDialog();
         if (okClicked) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.initOwner(mainApp.getPrimaryStage());
+            alert.setTitle("Success");
+            alert.setHeaderText("Kontakt hinzugefügt");
+            alert.setContentText("Kontakt wurde erfolgreich in Kontaktliste aufgenommen.");
 
+            alert.showAndWait();
         }
     }
 
