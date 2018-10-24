@@ -41,7 +41,7 @@ public class StartupDialogController {
 
 
     @FXML
-    private void initialize() {
+    private void initialize() throws IOException{
         serializationStrategy = new JsonSerializationStrategy();
     }
 
