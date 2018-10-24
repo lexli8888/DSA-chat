@@ -23,7 +23,7 @@ public class StartupDialogController {
 
     private Main mainApp;
 
-    private ChatClient client = new ChatClient();
+    private ChatClient client;
 
     public StartupDialogController() throws IOException {}
 
@@ -41,7 +41,7 @@ public class StartupDialogController {
 
 
     @FXML
-    private void initialize() {
+    private void initialize() throws IOException{
         serializationStrategy = new JsonSerializationStrategy();
     }
 
@@ -52,6 +52,8 @@ public class StartupDialogController {
         String firstName = FirstName.getText();
         String lastName = LastName.getText();
         String userName = UserName.getText();
+
+
 
         if(!userName.isEmpty() && !firstName.isEmpty() && !lastName.isEmpty()){
             KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
@@ -96,6 +98,7 @@ public class StartupDialogController {
 
     public void setMainApp(Main mainApp) {
         this.mainApp = mainApp;
+        this.client = mainApp.getChatClient();
     }
 }
 

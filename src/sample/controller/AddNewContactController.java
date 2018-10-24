@@ -1,15 +1,15 @@
 package sample.controller;
 
 import communication.ChatClient;
-import communication.ChatList;
+import communication.ContactList;
 import communication.UserInfo;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import sample.Main;
-import sample.model.Person;
-import sample.util.DateUtil;
+
+import java.util.List;
 
 /**
  * Created by a-003-ebr on 01.10.2018.
@@ -19,6 +19,7 @@ public class AddNewContactController {
     @FXML
     private TextField userName;
     private ChatClient client;
+    private ContactList contactList;
     private Stage dialogStage;
     private Main mainApp;
     private boolean okClicked = false;
@@ -41,8 +42,6 @@ public class AddNewContactController {
     @FXML
     private void handleOk() throws Exception {
         if (isInputValid()) {
-
-
             okClicked = true;
             dialogStage.close();
         }
@@ -53,13 +52,17 @@ public class AddNewContactController {
         dialogStage.close();
     }
 
-    private boolean isInputValid() throws Exception {
+    private boolean isInputValid()  {
         String errorMessage = "";
+        try {
+            UserInfo contact = client.getUserInfo(userName.getText());
+            System.out.println(contact.getUsername() + "wird der Kontaktliste hinzugefügt");
+            saveContactinDHT(contact);
 
-        UserInfo contact = client.getUserInfo(userName.getText());
 
-
-
+        } catch (Exception e) {
+            errorMessage = "User wurde nicht gefunden! Username überprüfen.";
+        }
         if (errorMessage.length() == 0) {
             return true;
         } else {
@@ -67,7 +70,7 @@ public class AddNewContactController {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.initOwner(dialogStage);
             alert.setTitle("Invalid Fields");
-            alert.setHeaderText("Please correct invalid fields");
+            alert.setHeaderText("Ungültiger Username");
             alert.setContentText(errorMessage);
 
             alert.showAndWait();
@@ -76,12 +79,17 @@ public class AddNewContactController {
         }
     }
 
-    public void setClient(ChatClient client) {
-        this.client = client;
+    private void saveContactinDHT(UserInfo contact) throws Exception {
+        List<UserInfo> list = contactList.getContactsAsList();
+        list.add(contact);
+        contactList.setContacts(list);
+        client.saveContactList(contactList);
     }
 
-    public void setMainApp(Main mainApp) {
-        this.mainApp = mainApp;
 
+    public void setMainApp(Main mainApp) throws Exception {
+        this.mainApp = mainApp;
+        this.client = mainApp.getChatClient();
+        this.contactList = client.getContactList();
     }
 }

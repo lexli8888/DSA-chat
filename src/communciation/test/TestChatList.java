@@ -18,7 +18,7 @@ public class TestChatList {
         ChatClient client1 = clients.get(0);
 
         ChatList chatList = client1.getChatList();
-        assertEquals(0, chatList.getChats().size());
+        assertEquals(0, chatList.getChatsAsList().size());
     }
 
 
@@ -38,9 +38,9 @@ public class TestChatList {
 
         ChatList fetchedChatList = client1.getChatList();
 
-        assertEquals(chatList.getChats().size(), fetchedChatList.getChats().size());
+        assertEquals(chatList.getChatsAsList().size(), fetchedChatList.getChatsAsList().size());
 
-        ChatInfo fetchedChat = fetchedChatList.getChats().get(0);
+        ChatInfo fetchedChat = fetchedChatList.getChatsAsList().get(0);
         assertEquals(chat.getId(), fetchedChat.getId());
         assertEquals(chat.getTitle(), fetchedChat.getTitle());
         assertEquals(EncryptionUtil.getKeySignature(chat.getKeyPair().getPrivate()), EncryptionUtil.getKeySignature(fetchedChat.getKeyPair().getPrivate()));

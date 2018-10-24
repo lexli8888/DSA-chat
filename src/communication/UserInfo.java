@@ -1,6 +1,7 @@
 package communication;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import javafx.beans.property.StringProperty;
 
 import java.security.*;
 import java.util.Base64;

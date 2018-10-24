@@ -1,6 +1,7 @@
 package sample.controller;
 
 import communication.ChatClient;
+import communication.ChatInfo;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
@@ -17,9 +18,9 @@ import sample.model.Person;
 public class ChatOverviewController {
 
     @FXML
-    private TableView<Chat> chatsTable;
+    private TableView<ChatInfo> chatsTable;
     @FXML
-    private TableColumn<Chat, String> chatsColumn;
+    private TableColumn<ChatInfo, String> chatsColumn;
     @FXML
     private TextArea chatTextArea;
     @FXML
@@ -31,11 +32,8 @@ public class ChatOverviewController {
     public ChatOverviewController() {
     }
 
-    public void setClient(ChatClient client) {
-        this.client = client;
-    }
-
-    private void showChatMessages(Chat chat) {
+    private void showChatMessages(ChatInfo chat) {
+        /* Adapt to ChatInfo
         if (chat != null && chat.getMessages() != null) {
             chatTextArea.clear();
             // Fill the chat with info from the chat object.
@@ -47,6 +45,21 @@ public class ChatOverviewController {
             // chat is null, remove all the text.
             chatTextArea.setText("");
         }
+        */
+    }
+
+    @FXML
+    private void initialize() {
+        // Initialize the chat table with the two columns.
+        //chatsColumn.setCellValueFactory(cellData -> cellData.getValue().getTitle();
+
+        chatsTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> showChatMessages(newValue));
+    }
+
+    public void setMainApp(Main mainApp) {
+        this.mainApp = mainApp;
+        this.client = mainApp.getChatClient();
+
     }
 
     @FXML
@@ -61,8 +74,7 @@ public class ChatOverviewController {
 
     @FXML
     private void handleNewChat() {
-        Chat tempChat = new Chat();
-        boolean okClicked = mainApp.showNewChatDialog(tempChat);
+        boolean okClicked = mainApp.addNewChatDialog();
         if (okClicked) {
 
         }
@@ -92,21 +104,11 @@ public class ChatOverviewController {
                 chatTextArea.appendText(msg.getPerson().getFirstName() + "> " + msg.getText() + "\n");
                 inputTextArea.clear();
             }
-        }
-
-    @FXML
-    private void initialize() {
-        // Initialize the chat table with the two columns.
-        chatsColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
-
-        chatsTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> showChatMessages(newValue));
     }
 
-    public void setMainApp(Main mainApp) {
-        this.mainApp = mainApp;
 
 
-    }
+
 
     private void nothingSelected() {
         // Nothing selected.
