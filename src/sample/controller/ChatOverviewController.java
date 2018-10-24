@@ -76,7 +76,13 @@ public class ChatOverviewController {
     private void handleNewChat() {
         boolean okClicked = mainApp.addNewChatDialog();
         if (okClicked) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.initOwner(mainApp.getPrimaryStage());
+            alert.setTitle("Success");
+            alert.setHeaderText("Chat erstellt");
+            alert.setContentText("Ein neuer Chat wurde erfolgreich erstellt");
 
+            alert.showAndWait();
         }
     }
 
