@@ -25,6 +25,10 @@
             <id>tomp2p.net</id>
             <url>http://tomp2p.net/dev/mvn/</url>
         </repository>
+        <repository>
+            <id>bintray</id>
+            <url>https://dl.bintray.com/ethereum/maven/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -48,6 +52,17 @@
             <artifactId>junit-jupiter-api</artifactId>
             <version>RELEASE</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.iconator</groupId>
+            <artifactId>testonator</artifactId>
+            <version>1.0.26</version>
+        </dependency>
+        <dependency>
+            <groupId>org.ethereum</groupId>
+            <artifactId>ethereumj-core</artifactId>
+            <version>1.9.0-RELEASE</version>
+            <type>pom</type>
         </dependency>
     </dependencies>
 </project>
