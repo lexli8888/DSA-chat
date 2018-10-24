@@ -2,6 +2,7 @@ package communication;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.omg.CosNaming.NamingContextPackage.NotFound;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +22,15 @@ public class ContactList {
         ObservableList<UserInfo> observableList = FXCollections.observableArrayList();
         observableList.addAll(contacts);
         return observableList;
+    }
+
+    public UserInfo searchUser(String username) throws Exception {
+        for(UserInfo user : contacts){
+            if(user.getUsername() == username){
+                return user;
+            }
+        }
+        throw new Exception("User nicht gefunden");
     }
 
     public void setContacts(List<UserInfo> contacts) {

@@ -1,8 +1,7 @@
 package sample.controller;
 
-import communication.ChatClient;
-import communication.ChatInfo;
-import communication.ChatList;
+import communication.*;
+import javafx.util.StringConverter;
 import org.controlsfx.control.CheckComboBox;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -19,12 +18,13 @@ import java.util.List;
 public class AddNewChatController {
 
     @FXML
-    private CheckComboBox memberComboBox;
+    private CheckComboBox<UserInfo> memberComboBox;
     @FXML
     private TextField titleField;
 
     private ChatClient client;
     private ChatList chatList;
+    private ContactList contactList;
     private Stage dialogStage;
     private Main mainApp;
     private boolean okClicked = false;
@@ -64,11 +64,18 @@ public class AddNewChatController {
 
         try {
             ChatInfo chat = ChatInfo.New(titleField.getText());
-            System.out.println(chat.getTitle() + "wird der Chatliste hinzugefügt");
             saveChatinDHT(chat);
+            List<UserInfo> invites = memberComboBox.getCheckModel().getCheckedItems();
+            client.inviteChatMember(chat, client.getUserInfo(mainApp.getUserName()));
+            for(UserInfo user : invites){
+                client.inviteChatMember(chat, user);
+            }
+            System.out.println(chat.getTitle() + "wird der Chatliste hinzugefügt");
+
         } catch (NoSuchAlgorithmException e) {
             errorMessage += "Etwas ist schief gelaufen";
         } catch (Exception e) {
+            e.printStackTrace();
             errorMessage += "Chat konnte nicht erstellt werden";
         }
 
@@ -100,5 +107,24 @@ public class AddNewChatController {
         this.mainApp = mainApp;
         this.client = mainApp.getChatClient();
         this.chatList = mainApp.getChatList();
+        this.contactList = mainApp.getContactList();
+        memberComboBox.getItems().addAll(contactList.getContactsAsObservableList());
+        memberComboBox.setConverter(new StringConverter<UserInfo>() {
+            @Override
+            public String toString(UserInfo user) {
+                return user.getUsername();
+            }
+
+            @Override
+            public UserInfo fromString(String username) {
+                try {
+                    return contactList.searchUser(username);
+                    //return client.getUserInfo(username);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+        });
     }
 }

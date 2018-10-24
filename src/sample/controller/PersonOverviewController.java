@@ -62,7 +62,7 @@ public class PersonOverviewController {
         this.mainApp = mainApp;
         this.client = mainApp.getChatClient();
         this.contactList = mainApp.getContactList();
-        personTable.setItems(mainApp.getContactList().getContactsAsObservableList());
+        personTable.setItems(contactList.getContactsAsObservableList());
     }
 
     @FXML

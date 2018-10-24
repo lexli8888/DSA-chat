@@ -22,6 +22,7 @@ public class Main extends Application {
     private Stage primaryStage;
     private BorderPane rootLayout;
 
+    private UserSetting user;
     private ContactList contactList;
     private ChatList chatList;
     private ChatClient client;
@@ -37,6 +38,8 @@ public class Main extends Application {
 
     public ChatClient getChatClient(){return client;}
 
+    public String getUserName(){return user.getUsername();}
+
     @Override
     public void start(Stage primaryStage) throws Exception{
         this.primaryStage = primaryStage;
@@ -49,8 +52,8 @@ public class Main extends Application {
 
         if (keyFile.exists()) {
             Scanner sc = new Scanner(keyFile);
-            UserSetting userSetting = serializationStrategy.deserialize(sc.nextLine(), null, UserSetting.class);
-            client.login(userSetting.getUsername(), userSetting.getKeyPair());
+            user = serializationStrategy.deserialize(sc.nextLine(), null, UserSetting.class);
+            client.login(user.getUsername(), user.getKeyPair());
             fetchUserData();
             initRootLayout();
             showChatOverview();

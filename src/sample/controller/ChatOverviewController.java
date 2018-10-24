@@ -2,6 +2,8 @@ package sample.controller;
 
 import communication.ChatClient;
 import communication.ChatInfo;
+import communication.ChatList;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
@@ -28,6 +30,7 @@ public class ChatOverviewController {
 
     private Main mainApp;
     private ChatClient client;
+    private ChatList chatList;
 
     public ChatOverviewController() {
     }
@@ -50,16 +53,16 @@ public class ChatOverviewController {
 
     @FXML
     private void initialize() {
-        // Initialize the chat table with the two columns.
-        //chatsColumn.setCellValueFactory(cellData -> cellData.getValue().getTitle();
-
+        // Initialize the chat table with the two columns
+        chatsColumn.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getTitle()));
+        showChatMessages(null);
         chatsTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> showChatMessages(newValue));
     }
 
     public void setMainApp(Main mainApp) {
         this.mainApp = mainApp;
         this.client = mainApp.getChatClient();
-
+        this.chatList = mainApp.getChatList();
     }
 
     @FXML
