@@ -1,7 +1,6 @@
 package sample.controller;
 
 import communication.ChatClient;
-import communication.ChatList;
 import communication.ContactList;
 import communication.UserInfo;
 import javafx.fxml.FXML;
@@ -9,8 +8,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import sample.Main;
-import sample.model.Person;
-import sample.util.DateUtil;
 
 import java.util.List;
 
@@ -83,7 +80,7 @@ public class AddNewContactController {
     }
 
     private void saveContactinDHT(UserInfo contact) throws Exception {
-        List<UserInfo> list = contactList.getContacts();
+        List<UserInfo> list = contactList.getContactsAsList();
         list.add(contact);
         contactList.setContacts(list);
         client.saveContactList(contactList);

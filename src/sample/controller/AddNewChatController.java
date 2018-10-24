@@ -4,21 +4,13 @@ import communication.ChatClient;
 import communication.ChatInfo;
 import communication.ChatList;
 import org.controlsfx.control.CheckComboBox;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import javafx.util.StringConverter;
 import sample.Main;
-import sample.model.Chat;
-import sample.model.Message;
-import sample.model.Person;
 
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -97,7 +89,7 @@ public class AddNewChatController {
     }
 
     private void saveChatinDHT(ChatInfo chat) throws Exception {
-        List<ChatInfo> list = chatList.getChats();
+        List<ChatInfo> list = chatList.getChatsAsList();
         list.add(chat);
         chatList.setChats(list);
         client.saveChatList(chatList);

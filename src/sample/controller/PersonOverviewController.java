@@ -1,8 +1,10 @@
 package sample.controller;
 
 import communication.ChatClient;
+import communication.ContactList;
 import communication.UserInfo;
 import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
@@ -28,6 +30,8 @@ public class PersonOverviewController {
 
     private Main mainApp;
     private ChatClient client;
+    private ContactList contactList;
+
 
     public PersonOverviewController() {
     }
@@ -58,9 +62,10 @@ public class PersonOverviewController {
         personTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> showPersonDetails(newValue));
     }
 
-    public void setMainApp(Main mainApp) {
+    public void setMainApp(Main mainApp) throws Exception {
         this.mainApp = mainApp;
         this.client = mainApp.getChatClient();
+        personTable.setItems(mainApp.getContactList().getContactsAsObservableList());
     }
 
     @FXML

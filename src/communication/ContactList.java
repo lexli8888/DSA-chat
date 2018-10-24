@@ -1,5 +1,8 @@
 package communication;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,8 +13,14 @@ public class ContactList {
         contacts = new ArrayList<>();
     }
 
-    public List<UserInfo> getContacts() {
+    public List<UserInfo> getContactsAsList() {
         return contacts;
+    }
+
+    public ObservableList<UserInfo> getContactsAsObservableList(){
+        ObservableList<UserInfo> observableList = FXCollections.observableArrayList();
+        observableList.addAll(contacts);
+        return observableList;
     }
 
     public void setContacts(List<UserInfo> contacts) {
