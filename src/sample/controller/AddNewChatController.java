@@ -66,7 +66,7 @@ public class AddNewChatController {
             ChatInfo chat = ChatInfo.New(titleField.getText());
             saveChatinDHT(chat);
             List<UserInfo> invites = memberComboBox.getCheckModel().getCheckedItems();
-            client.inviteChatMember(chat, client.getUserInfo(mainApp.getUserName()));
+            //client.inviteChatMember(chat, client.getUserInfo(mainApp.getUserName()));
             for(UserInfo user : invites){
                 client.inviteChatMember(chat, user);
             }

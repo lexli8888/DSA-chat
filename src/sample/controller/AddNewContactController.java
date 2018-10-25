@@ -88,6 +88,6 @@ public class AddNewContactController {
     public void setMainApp(Main mainApp) throws Exception {
         this.mainApp = mainApp;
         this.client = mainApp.getChatClient();
-        this.contactList = client.getContactList();
+        //this.contactList = client.getContactList();
     }
 }

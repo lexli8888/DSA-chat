@@ -30,6 +30,8 @@ public class Main extends Application {
 
     public Main() throws Exception {
         client = new ChatClient();
+        //client.discoverOnLocalhost(4000);
+
     }
 
     public ContactList getContactList() { return contactList; }
