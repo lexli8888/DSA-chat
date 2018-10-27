@@ -97,7 +97,7 @@ public class PeerDHTUtil {
         if (!futureGet.isSuccess()) {
             return null;
         }
-
+        //values == null -> this.lock???
         Iterator<Data> values = futureGet.dataMap().values().iterator();
         if (values.hasNext()) {
             Data data = values.next();

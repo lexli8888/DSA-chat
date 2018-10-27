@@ -33,14 +33,12 @@ public class AddNewContactController {
         this.dialogStage = dialogStage;
     }
 
-
-
     public boolean isOkClicked() {
         return okClicked;
     }
 
     @FXML
-    private void handleOk() throws Exception {
+    private void handleOk() {
         if (isInputValid()) {
             okClicked = true;
             dialogStage.close();
@@ -55,13 +53,14 @@ public class AddNewContactController {
     private boolean isInputValid()  {
         String errorMessage = "";
         try {
-            UserInfo contact = client.getUserInfo(userName.getText());
+            UserInfo contact = client.getUserInfo(mainApp.getUserName());
             System.out.println(contact.getUsername() + "wird der Kontaktliste hinzugefügt");
             saveContactinDHT(contact);
 
 
         } catch (Exception e) {
-            errorMessage = "User wurde nicht gefunden! Username überprüfen.";
+            e.printStackTrace();
+            errorMessage = "User " + userName.getText() + " wurde nicht gefunden! Username überprüfen.";
         }
         if (errorMessage.length() == 0) {
             return true;
