@@ -3,6 +3,7 @@ package sample.controller;
 import communication.ChatClient;
 import communication.ChatInfo;
 import communication.ChatList;
+import communication.ChatMessage;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -13,6 +14,8 @@ import sample.Main;
 import sample.model.Chat;
 import sample.model.Message;
 import sample.model.Person;
+
+import java.util.List;
 
 /**
  * Created by a-003-ebr on 01.10.2018.
@@ -35,34 +38,44 @@ public class ChatOverviewController {
     public ChatOverviewController() {
     }
 
-    private void showChatMessages(ChatInfo chat) {
-        /* Adapt to ChatInfo
-        if (chat != null && chat.getMessages() != null) {
+
+    private void showChatMessages(ChatInfo chat) throws Exception {
+        if (chat != null) {
             chatTextArea.clear();
-            // Fill the chat with info from the chat object.
-            for (int i = 0; i < chat.getMessages().size(); i++){
-                chatTextArea.appendText(chat.getMessages().get(i).getPerson().getFirstName() + "> " + chat.getMessages().get(i).getText());
-                chatTextArea.appendText("\n");
+            List<ChatMessage> chatMessages = client.getMessages(chat);
+            if(chatMessages != null){
+                for(int i =0; i < chatMessages.size(); i++){
+                    chatTextArea.appendText(chatMessages.get(i).getSender().getUsername() + "> " + chatMessages.get(i).getText());
+
+                    chatTextArea.appendText("\n");
+                }
             }
         } else {
             // chat is null, remove all the text.
             chatTextArea.setText("");
         }
-        */
+
     }
 
     @FXML
-    private void initialize() {
+    private void initialize() throws Exception {
         // Initialize the chat table with the two columns
         chatsColumn.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getTitle()));
         showChatMessages(null);
-        chatsTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> showChatMessages(newValue));
+        chatsTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            try {
+                showChatMessages(newValue);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     public void setMainApp(Main mainApp) {
         this.mainApp = mainApp;
         this.client = mainApp.getChatClient();
         this.chatList = mainApp.getChatList();
+        chatsTable.setItems(chatList.getChatsAsObservableList());
     }
 
     @FXML
@@ -79,6 +92,8 @@ public class ChatOverviewController {
     private void handleNewChat() {
         boolean okClicked = mainApp.addNewChatDialog();
         if (okClicked) {
+            chatsTable.setItems(chatList.getChatsAsObservableList());
+
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.initOwner(mainApp.getPrimaryStage());
             alert.setTitle("Success");
@@ -90,7 +105,7 @@ public class ChatOverviewController {
     }
 
     @FXML
-    private void handleNewChatEntry() {
+    private void handleNewChatEntry() throws Exception {
         int selectedIndex = chatsTable.getSelectionModel().getSelectedIndex();
         if (inputTextArea.getText().isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -105,13 +120,21 @@ public class ChatOverviewController {
            nothingSelected();
 
         } else {
-                // I am Ruth Mueller -> logged in user
-                Person mueller = new Person("Ruth", "Mueller");
-                Message msg = new Message(inputTextArea.getText(), mueller);
+                ChatInfo chat = chatsTable.getSelectionModel().getSelectedItem();
+                // Schreibt (auf localhost) zurzeit als Absender noch ein null object, darum können keine Chats verschickt werden.
+                ChatMessage message = ChatMessage.New(client.getUserInfo(mainApp.getUserName()), inputTextArea.getText());
+                if(client.sendMessage(chat, message)){
+                    showChatMessages(chat);
+                }
+                else{
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.initOwner(mainApp.getPrimaryStage());
+                    alert.setTitle("Message Warning");
+                    alert.setHeaderText("Message not sent");
+                    alert.setContentText("Houston, we have a problem. Check your Network settings and retry to send the message.");
 
-
-                chatTextArea.appendText(msg.getPerson().getFirstName() + "> " + msg.getText() + "\n");
-                inputTextArea.clear();
+                    alert.showAndWait();
+                }
             }
     }
 

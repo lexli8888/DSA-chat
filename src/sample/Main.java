@@ -30,6 +30,7 @@ public class Main extends Application {
 
     public Main() throws Exception {
         client = new ChatClient();
+        client.discoverOnInet("apps.bertschi.io", 4000);
         //client.discoverOnLocalhost(4000);
 
     }
@@ -55,6 +56,7 @@ public class Main extends Application {
         if (keyFile.exists()) {
             Scanner sc = new Scanner(keyFile);
             user = serializationStrategy.deserialize(sc.nextLine(), null, UserSetting.class);
+            sc.close();
             client.login(user.getUsername(), user.getKeyPair());
             fetchUserData();
             initRootLayout();

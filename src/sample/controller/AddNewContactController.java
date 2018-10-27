@@ -53,13 +53,14 @@ public class AddNewContactController {
     private boolean isInputValid()  {
         String errorMessage = "";
         try {
-            UserInfo contact = client.getUserInfo(userName.getText());
+            UserInfo contact = client.getUserInfo(mainApp.getUserName());
             System.out.println(contact.getUsername() + "wird der Kontaktliste hinzugefügt");
             saveContactinDHT(contact);
 
 
         } catch (Exception e) {
-            errorMessage = "User wurde nicht gefunden! Username überprüfen.";
+            e.printStackTrace();
+            errorMessage = "User " + userName.getText() + " wurde nicht gefunden! Username überprüfen.";
         }
         if (errorMessage.length() == 0) {
             return true;
@@ -88,6 +89,6 @@ public class AddNewContactController {
     public void setMainApp(Main mainApp) throws Exception {
         this.mainApp = mainApp;
         this.client = mainApp.getChatClient();
-        //this.contactList = client.getContactList();
+        this.contactList = client.getContactList();
     }
 }
