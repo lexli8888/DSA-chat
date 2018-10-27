@@ -8,8 +8,10 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.security.KeyPair;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 
@@ -143,10 +145,13 @@ public class ChatClient {
         return serializationStrategy.deserialize(data, new ContactList(), ContactList.class);
     }
 
-    public void login(String username, KeyPair keyPair) {
+    public boolean login(String username, KeyPair keyPair) throws Exception {
         this.username = username;
         this.keyPair = keyPair;
         this.peer.peer().peerBean().keyPair(keyPair);
+
+        UserInfo info = getUserInfo(username);
+        return info != null && info.matchesPublicKey(keyPair.getPublic());
     }
 
     public boolean register(UserInfo userInfo, KeyPair keyPair) throws Exception {

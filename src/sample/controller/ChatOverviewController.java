@@ -11,9 +11,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import sample.Main;
-import sample.model.Chat;
-import sample.model.Message;
-import sample.model.Person;
 
 import java.util.List;
 
@@ -75,7 +72,7 @@ public class ChatOverviewController {
         this.mainApp = mainApp;
         this.client = mainApp.getChatClient();
         this.chatList = mainApp.getChatList();
-        chatsTable.setItems(chatList.getChatsAsObservableList());
+        chatsTable.setItems(chatList.chatsAsObservableList());
     }
 
     @FXML
@@ -92,7 +89,7 @@ public class ChatOverviewController {
     private void handleNewChat() {
         boolean okClicked = mainApp.addNewChatDialog();
         if (okClicked) {
-            chatsTable.setItems(chatList.getChatsAsObservableList());
+            chatsTable.setItems(chatList.chatsAsObservableList());
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.initOwner(mainApp.getPrimaryStage());

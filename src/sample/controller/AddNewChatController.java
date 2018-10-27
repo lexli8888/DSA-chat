@@ -97,7 +97,7 @@ public class AddNewChatController {
     }
 
     private void saveChatinDHT(ChatInfo chat) throws Exception {
-        List<ChatInfo> list = chatList.getChatsAsList();
+        List<ChatInfo> list = chatList.getChats();
         list.add(chat);
         chatList.setChats(list);
         client.saveChatList(chatList);
@@ -109,7 +109,7 @@ public class AddNewChatController {
         this.client = mainApp.getChatClient();
         this.chatList = mainApp.getChatList();
         this.contactList = mainApp.getContactList();
-        memberComboBox.getItems().addAll(contactList.getContactsAsObservableList());
+        memberComboBox.getItems().addAll(contactList.contactsAsObservableList());
         memberComboBox.setConverter(new StringConverter<UserInfo>() {
             @Override
             public String toString(UserInfo user) {

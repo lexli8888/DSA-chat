@@ -17,7 +17,11 @@ public class PeerDHTFactory {
     public static PeerDHT CreatePeer() throws IOException {
         Random random = new SecureRandom();
         int port = 4000 + random.nextInt(2000);
+        return CreatePeer(port);
+    }
 
+    public static PeerDHT CreatePeer(int port) throws IOException {
+        Random random = new SecureRandom();
         Number160 peerId = Number160.createHash(random.nextLong());
         PeerBuilder builder = new PeerBuilder(peerId);
 

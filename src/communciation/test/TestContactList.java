@@ -22,7 +22,7 @@ public class TestContactList {
         ChatClient client1 = clients.get(0);
 
         ContactList contactList = client1.getContactList();
-        assertEquals(0, contactList.getContactsAsList().size());
+        assertEquals(0, contactList.getContacts().size());
     }
 
 
@@ -45,10 +45,10 @@ public class TestContactList {
 
         ContactList fetchedContactList = client1.getContactList();
 
-        assertEquals(contactList.getContactsAsList().size(), fetchedContactList.getContactsAsList().size());
-        assertEquals(contactList.getContactsAsList().get(0).getUsername(), fetchedContactList.getContactsAsList().get(0).getUsername());
-        assertEquals(contactList.getContactsAsList().get(0).getFirstName(), fetchedContactList.getContactsAsList().get(0).getFirstName());
-        assertEquals(contactList.getContactsAsList().get(0).getLastName(), fetchedContactList.getContactsAsList().get(0).getLastName());
-        assertEquals(contactList.getContactsAsList().get(0).getPublicKeySignature(), fetchedContactList.getContactsAsList().get(0).getPublicKeySignature());
+        assertEquals(contactList.getContacts().size(), fetchedContactList.getContacts().size());
+        assertEquals(contactList.getContacts().get(0).getUsername(), fetchedContactList.getContacts().get(0).getUsername());
+        assertEquals(contactList.getContacts().get(0).getFirstName(), fetchedContactList.getContacts().get(0).getFirstName());
+        assertEquals(contactList.getContacts().get(0).getLastName(), fetchedContactList.getContacts().get(0).getLastName());
+        assertEquals(contactList.getContacts().get(0).getPublicKeySignature(), fetchedContactList.getContacts().get(0).getPublicKeySignature());
     }
 }

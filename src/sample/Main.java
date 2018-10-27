@@ -30,8 +30,8 @@ public class Main extends Application {
 
     public Main() throws Exception {
         client = new ChatClient();
-        client.discoverOnInet("apps.bertschi.io", 4000);
-        //client.discoverOnLocalhost(4000);
+        //client.discoverOnInet("apps.bertschi.io", 4000);
+        client.discoverOnLocalhost(4000);
 
     }
 
@@ -51,7 +51,8 @@ public class Main extends Application {
         serializationStrategy = new JsonSerializationStrategy();
 
         String APP_DATA_PATH = System.getProperty("user.home") + File.separator + "DSA-Chat";
-        File keyFile = new File(APP_DATA_PATH + File.separator + "key.txt");
+        String filename = APP_DATA_PATH + File.separator + "key.txt";
+        File keyFile = new File(filename);
 
         if (keyFile.exists()) {
             Scanner sc = new Scanner(keyFile);
@@ -69,14 +70,6 @@ public class Main extends Application {
     private void fetchUserData() throws Exception {
         contactList = client.getContactList();
         chatList = client.getChatList();
-        generateTestUsers(5);
-    }
-
-    private void generateTestUsers(int amount) throws Exception {
-        List<UserInfo> list = contactList.getContactsAsList();
-        list.addAll(UserInfoFactory.getUsers(amount));
-        contactList.setContacts(list);
-        client.saveContactList(contactList);
     }
 
     public void initRootLayout() {

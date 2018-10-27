@@ -79,7 +79,7 @@ public class AddNewContactController {
     }
 
     private void saveContactinDHT(UserInfo contact) throws Exception {
-        List<UserInfo> list = contactList.getContactsAsList();
+        List<UserInfo> list = contactList.contactsAsObservableList();
         list.add(contact);
         contactList.setContacts(list);
         client.saveContactList(contactList);

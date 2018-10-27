@@ -14,11 +14,11 @@ public class ContactList {
         contacts = new ArrayList<>();
     }
 
-    public List<UserInfo> getContactsAsList() {
+    public List<UserInfo> getContacts() {
         return contacts;
     }
 
-    public ObservableList<UserInfo> getContactsAsObservableList(){
+    public ObservableList<UserInfo> contactsAsObservableList(){
         ObservableList<UserInfo> observableList = FXCollections.observableArrayList();
         observableList.addAll(contacts);
         return observableList;

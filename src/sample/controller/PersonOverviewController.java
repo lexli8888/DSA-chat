@@ -62,14 +62,14 @@ public class PersonOverviewController {
         this.mainApp = mainApp;
         this.client = mainApp.getChatClient();
         this.contactList = mainApp.getContactList();
-        personTable.setItems(contactList.getContactsAsObservableList());
+        personTable.setItems(contactList.contactsAsObservableList());
     }
 
     @FXML
     private void handleDeletePerson() throws Exception {
         int selectedIndex = personTable.getSelectionModel().getSelectedIndex();
         if (selectedIndex >= 0) {
-            List<UserInfo> contacts = contactList.getContactsAsList();
+            List<UserInfo> contacts = contactList.getContacts();
             UserInfo userToRemove = personTable.getItems().get(selectedIndex);
             contacts.remove(userToRemove);
             contactList.setContacts(contacts);

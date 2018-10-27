@@ -13,11 +13,11 @@ public class ChatList {
         chats = new ArrayList<>();
     }
 
-    public List<ChatInfo> getChatsAsList() {
+    public List<ChatInfo> getChats() {
         return chats;
     }
 
-    public ObservableList<ChatInfo> getChatsAsObservableList(){
+    public ObservableList<ChatInfo> chatsAsObservableList(){
         ObservableList<ChatInfo> observableList = FXCollections.observableArrayList();
         observableList.addAll(chats);
         return observableList;
