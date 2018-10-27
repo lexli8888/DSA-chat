@@ -17,14 +17,16 @@ public class ChatClientTestHelper {
             KeyPair key = keyGenerator.generateKeyPair();
             ChatClient client = new ChatClient();
             String username = "user" + i;
+
+            if (i > 0) {
+                client.discoverClient(clients.get(0));
+            }
+
             UserInfo info = UserInfo.New(key.getPublic(), username, "first " + i, "last " + i);
             if (!client.register(info, key)) {
                 throw new Exception("could not register client");
             }
 
-            if (i > 0) {
-                client.discoverClient(clients.get(0));
-            }
             clients.add(client);
         }
 

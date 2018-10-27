@@ -4,6 +4,8 @@ import io.iconator.testonator.Contract;
 import io.iconator.testonator.DeployedContract;
 import io.iconator.testonator.Event;
 import io.iconator.testonator.TestBlockchain;
+import org.ethereum.core.Blockchain;
+import org.ethereum.core.BlockchainImpl;
 import org.junit.jupiter.api.Test;
 import org.web3j.abi.datatypes.Type;
 
@@ -22,6 +24,9 @@ public class TestNotary {
     @Test
     public void testContact() throws Exception {
         TestBlockchain blockchain = TestBlockchain.run();
+
+
+        //Blockchain chain = new BlockchainImpl();
 
 
         File contractFile = Paths.get(ClassLoader.getSystemResource("Notary.sol").toURI()).toFile();
