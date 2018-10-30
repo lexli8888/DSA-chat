@@ -104,11 +104,11 @@ public class AddNewChatController {
     }
 
 
-    public void setMainApp(Main mainApp) {
+    public void setMainApp(Main mainApp) throws Exception{
         this.mainApp = mainApp;
         this.client = mainApp.getChatClient();
         this.chatList = mainApp.getChatList();
-        this.contactList = mainApp.getContactList();
+        this.contactList = client.getContactList();
         // Insert contactList as Observable but not in Class
         //memberComboBox.getItems().addAll(contactList.contactsAsObservableList());
         memberComboBox.getItems().addAll(contactList.getContacts());

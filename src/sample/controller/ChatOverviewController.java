@@ -68,10 +68,10 @@ public class ChatOverviewController {
         });
     }
 
-    public void setMainApp(Main mainApp) {
+    public void setMainApp(Main mainApp) throws Exception{
         this.mainApp = mainApp;
         this.client = mainApp.getChatClient();
-        this.chatList = mainApp.getChatList();
+        this.chatList = client.getChatList();
 
         ObservableList<ChatInfo> observableList = FXCollections.observableArrayList();
         observableList.addAll(chatList.getChats());
