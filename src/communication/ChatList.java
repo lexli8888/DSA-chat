@@ -17,12 +17,6 @@ public class ChatList {
         return chats;
     }
 
-    public ObservableList<ChatInfo> chatsAsObservableList(){
-        ObservableList<ChatInfo> observableList = FXCollections.observableArrayList();
-        observableList.addAll(chats);
-        return observableList;
-    }
-
     public void setChats(List<ChatInfo> chats) {
         this.chats = chats;
     }
