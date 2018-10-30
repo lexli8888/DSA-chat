@@ -71,7 +71,7 @@ public class AddNewChatController {
             for(UserInfo user : invites){
                 client.inviteChatMember(chat, user);
             }
-            System.out.println(chat.getTitle() + "wird der Chatliste hinzugefügt");
+            System.out.println(chat.getTitle() + " wird der Chatliste hinzugefügt");
 
         } catch (NoSuchAlgorithmException e) {
             errorMessage += "Etwas ist schief gelaufen";
@@ -109,7 +109,9 @@ public class AddNewChatController {
         this.client = mainApp.getChatClient();
         this.chatList = mainApp.getChatList();
         this.contactList = mainApp.getContactList();
-        memberComboBox.getItems().addAll(contactList.contactsAsObservableList());
+        // Insert contactList as Observable but not in Class
+        //memberComboBox.getItems().addAll(contactList.contactsAsObservableList());
+        memberComboBox.getItems().addAll(contactList.getContacts());
         memberComboBox.setConverter(new StringConverter<UserInfo>() {
             @Override
             public String toString(UserInfo user) {

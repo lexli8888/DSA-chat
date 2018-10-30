@@ -1,10 +1,10 @@
 package sample.controller;
 
-import communication.ChatClient;
-import communication.ChatInfo;
-import communication.ChatList;
-import communication.ChatMessage;
+import communication.*;
 import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
@@ -57,7 +57,7 @@ public class ChatOverviewController {
     @FXML
     private void initialize() throws Exception {
         // Initialize the chat table with the two columns
-        chatsColumn.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getTitle()));
+        chatsColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTitle()));
         showChatMessages(null);
         chatsTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             try {
@@ -72,7 +72,11 @@ public class ChatOverviewController {
         this.mainApp = mainApp;
         this.client = mainApp.getChatClient();
         this.chatList = mainApp.getChatList();
-        chatsTable.setItems(chatList.chatsAsObservableList());
+
+        ObservableList<ChatInfo> observableList = FXCollections.observableArrayList();
+        observableList.addAll(chatList.getChats());
+
+        chatsTable.setItems(observableList);
     }
 
     @FXML
@@ -94,7 +98,11 @@ public class ChatOverviewController {
     private void handleNewChat() {
         boolean okClicked = mainApp.addNewChatDialog();
         if (okClicked) {
-            chatsTable.setItems(chatList.chatsAsObservableList());
+
+            ObservableList<ChatInfo> observableList = FXCollections.observableArrayList();
+            observableList.addAll(chatList.getChats());
+
+            chatsTable.setItems(observableList);
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.initOwner(mainApp.getPrimaryStage());
