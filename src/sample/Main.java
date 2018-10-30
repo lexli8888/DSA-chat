@@ -129,7 +129,7 @@ public class Main extends Application {
             ChatOverviewController controller = loader.getController();
             controller.setMainApp(this);
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -209,7 +209,7 @@ public class Main extends Application {
             dialogStage.showAndWait();
 
             return controller.isOkClicked();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
