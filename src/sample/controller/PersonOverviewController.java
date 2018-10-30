@@ -4,6 +4,8 @@ import communication.ChatClient;
 import communication.ContactList;
 import communication.UserInfo;
 import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -53,16 +55,27 @@ public class PersonOverviewController {
     @FXML
     private void initialize() {
         // Initialize the person table with the two columns.
-        userNameColumn.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getUsername()));
-        showPersonDetails(null);
-        personTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> showPersonDetails(newValue));
+        //userNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getUsername()));
+        //userNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty("Demo"));
+        // contactList is null at this time
+        System.out.println(contactList);
+        //showPersonDetails(null);
+        //personTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> showPersonDetails(newValue));
     }
 
-    public void setMainApp(Main mainApp)  {
+    public void setMainApp(Main mainApp) throws Exception {
         this.mainApp = mainApp;
         this.client = mainApp.getChatClient();
-        this.contactList = mainApp.getContactList();
-        personTable.setItems(contactList.contactsAsObservableList());
+        this.contactList = client.getContactList();
+
+        ObservableList<UserInfo> observableList = FXCollections.observableArrayList();
+        observableList.addAll(contactList.getContacts());
+
+        personTable.setItems(observableList);
+
+        userNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getUsername()));
+        showPersonDetails(null);
+        personTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> showPersonDetails(newValue));
     }
 
     @FXML
