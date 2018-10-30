@@ -53,10 +53,9 @@ public class AddNewContactController {
     private boolean isInputValid()  {
         String errorMessage = "";
         try {
-            UserInfo contact = client.getUserInfo(mainApp.getUserName());
-            System.out.println(contact.getUsername() + "wird der Kontaktliste hinzugefügt");
+            UserInfo contact = client.getUserInfo(userName.getText());
+            System.out.println(userName.toString() + "wird der Kontaktliste hinzugefügt");
             saveContactinDHT(contact);
-
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -79,7 +78,8 @@ public class AddNewContactController {
     }
 
     private void saveContactinDHT(UserInfo contact) throws Exception {
-        List<UserInfo> list = contactList.contactsAsObservableList();
+        List<UserInfo> list = contactList.getContacts();
+        //List<UserInfo> list = contactList.contactsAsObservableList();
         list.add(contact);
         contactList.setContacts(list);
         client.saveContactList(contactList);
