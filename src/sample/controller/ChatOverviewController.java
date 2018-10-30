@@ -133,6 +133,7 @@ public class ChatOverviewController {
                 ChatInfo chat = chatsTable.getSelectionModel().getSelectedItem();
                 // Schreibt (auf localhost) zurzeit als Absender noch ein null object, darum können keine Chats verschickt werden.
                 ChatMessage message = ChatMessage.New(client.getUserInfo(mainApp.getUserName()), inputTextArea.getText());
+                inputTextArea.setText("");
                 if(client.sendMessage(chat, message)){
                     showChatMessages(chat);
                 }
