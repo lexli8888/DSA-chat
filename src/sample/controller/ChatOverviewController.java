@@ -76,9 +76,14 @@ public class ChatOverviewController {
     }
 
     @FXML
-    private void handleDeleteChat() {
+    private void handleDeleteChat() throws Exception {
         int selectedIndex = chatsTable.getSelectionModel().getSelectedIndex();
         if (selectedIndex >= 0) {
+            List<ChatInfo> chats = chatList.getChats();
+            ChatInfo chatToRemove = chatsTable.getItems().get(selectedIndex);
+            chats.remove(chatToRemove);
+            chatList.setChats(chats);
+            client.saveChatList(chatList);
             chatsTable.getItems().remove(selectedIndex);
         } else {
             nothingSelected();
