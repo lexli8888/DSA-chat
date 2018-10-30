@@ -18,12 +18,6 @@ public class ContactList {
         return contacts;
     }
 
-    public ObservableList<UserInfo> contactsAsObservableList(){
-        ObservableList<UserInfo> observableList = FXCollections.observableArrayList();
-        observableList.addAll(contacts);
-        return observableList;
-    }
-
     public UserInfo searchUser(String username) throws Exception {
         for(UserInfo user : contacts){
             if(user.getUsername() == username){
