@@ -1,6 +1,7 @@
 package communciation.test;
 
 import communication.ChatClient;
+import communication.KeyPairFactory;
 import communication.UserInfo;
 
 import java.security.KeyPair;
@@ -10,11 +11,10 @@ import java.util.List;
 
 public class ChatClientTestHelper {
     public static List<ChatClient> getClients(int amount) throws Exception {
-        KeyPairGenerator keyGenerator = KeyPairGenerator.getInstance("RSA");
         List<ChatClient> clients = new ArrayList<>();
 
         for (int i = 0; i < amount; i++) {
-            KeyPair key = keyGenerator.generateKeyPair();
+            KeyPair key = KeyPairFactory.GenerateKeyPair();
             ChatClient client = new ChatClient();
             String username = "user" + i;
 

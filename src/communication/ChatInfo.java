@@ -19,8 +19,7 @@ public class ChatInfo {
     }
 
     public static ChatInfo New(String title) throws NoSuchAlgorithmException {
-        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
-        return ChatInfo.New(title, keyPairGenerator.generateKeyPair());
+        return ChatInfo.New(title, KeyPairFactory.GenerateKeyPair());
     }
 
     public String getId() {

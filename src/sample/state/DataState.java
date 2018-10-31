@@ -51,8 +51,7 @@ public class DataState {
     }
 
     public boolean register(String userName, String firstName, String lastName) throws Exception {
-        KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
-        KeyPair keyPair = generator.generateKeyPair();
+        KeyPair keyPair = KeyPairFactory.GenerateKeyPair();
 
         UserInfo user = UserInfo.New(keyPair.getPublic(), userName, firstName, lastName);
         if (client.register(user, keyPair)) {

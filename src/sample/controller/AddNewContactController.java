@@ -39,16 +39,20 @@ public class AddNewContactController implements IDataStateModalController {
         dialogStage.close();
     }
 
-    private boolean isInputValid()  {
+    private boolean isInputValid() {
         String errorMessage = "";
         try {
             UserInfo contact = dataState.getUser(userName.getText());
+            if (contact == null) {
+                throw new Exception("user not found");
+            }
             System.out.println(userName.toString() + "wird der Kontaktliste hinzugefügt");
             dataState.addContact(contact);
         } catch (Exception e) {
             e.printStackTrace();
             errorMessage = "User " + userName.getText() + " wurde nicht gefunden! Username überprüfen.";
         }
+
         if (errorMessage.length() == 0) {
             return true;
         } else {

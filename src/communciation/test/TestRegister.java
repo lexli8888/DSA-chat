@@ -1,6 +1,7 @@
 package communciation.test;
 
 import communication.ChatClient;
+import communication.KeyPairFactory;
 import communication.UserInfo;
 import org.junit.jupiter.api.Test;
 
@@ -20,8 +21,7 @@ public class TestRegister {
 
         ChatClient client1 = clients.get(0);
 
-        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
-        KeyPair keyPair = keyPairGenerator.generateKeyPair();
+        KeyPair keyPair = KeyPairFactory.GenerateKeyPair();
         UserInfo registrationInfo = UserInfo.New(keyPair.getPublic(), "pascal", "Pascal", "Bertschi");
 
         assertTrue(client1.register(registrationInfo, keyPair));
@@ -43,10 +43,8 @@ public class TestRegister {
         ChatClient client1 = clients.get(0);
         ChatClient client2 = clients.get(1);
 
-
-        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
-        KeyPair keyPair1 = keyPairGenerator.generateKeyPair();
-        KeyPair keyPair2 = keyPairGenerator.generateKeyPair();
+        KeyPair keyPair1 = KeyPairFactory.GenerateKeyPair();
+        KeyPair keyPair2 = KeyPairFactory.GenerateKeyPair();
 
         UserInfo firstRegistrationInfo = UserInfo.New(keyPair1.getPublic(), commonUserName, "Pascal", "Bertschi");
         assertTrue(client1.register(firstRegistrationInfo, keyPair1));

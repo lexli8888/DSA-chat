@@ -1,6 +1,7 @@
 package communciation.test;
 
 import communication.EncryptionUtil;
+import communication.KeyPairFactory;
 import org.junit.jupiter.api.Test;
 
 import java.security.KeyPair;
@@ -13,8 +14,7 @@ public class TestEncryptionUtil {
 
     @Test
     public void testRSADeEncryption() throws Exception {
-        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
-        KeyPair keyPair = keyPairGenerator.generateKeyPair();
+        KeyPair keyPair = KeyPairFactory.GenerateKeyPair();
 
         byte[] data = EncryptionUtil.getRandomBytes(80);
         byte[] encryptedData = EncryptionUtil.encryptRSA(keyPair.getPublic(), data);
@@ -37,8 +37,7 @@ public class TestEncryptionUtil {
 
     @Test
     public void testDataEncryption() throws Exception {
-        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
-        KeyPair keyPair = keyPairGenerator.generateKeyPair();
+        KeyPair keyPair = KeyPairFactory.GenerateKeyPair();
 
         String data = "foo";
         String encryptData = EncryptionUtil.encryptData(keyPair.getPublic(), data);

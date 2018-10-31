@@ -2,6 +2,7 @@ package communciation.test;
 
 import communication.ChatClient;
 import communication.ContactList;
+import communication.KeyPairFactory;
 import communication.UserInfo;
 import org.junit.jupiter.api.Test;
 
@@ -30,9 +31,7 @@ public class TestContactList {
     public void testStoreAndGetContactList() throws Exception {
         List<ChatClient> clients = ChatClientTestHelper.getClients(2);
 
-
-        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
-        KeyPair keyPair = keyPairGenerator.generateKeyPair();
+        KeyPair keyPair = KeyPairFactory.GenerateKeyPair();
 
         ChatClient client1 = clients.get(0);
 
