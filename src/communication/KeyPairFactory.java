@@ -10,7 +10,7 @@ public class KeyPairFactory {
     public static KeyPair GenerateKeyPair() throws NoSuchAlgorithmException {
         if (keyPairGenerator == null) {
             keyPairGenerator = KeyPairGenerator.getInstance("RSA");
-            keyPairGenerator.initialize(2048);
+            keyPairGenerator.initialize(1024);
         }
 
         return keyPairGenerator.generateKeyPair();
