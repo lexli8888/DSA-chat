@@ -1,33 +1,22 @@
 package sample.controller;
 
-import communication.ChatClient;
-import communication.ContactList;
 import communication.UserInfo;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import sample.Main;
+import sample.state.DataState;
 
-import java.util.List;
-
-/**
- * Created by a-003-ebr on 01.10.2018.
- */
-public class AddNewContactController {
+public class AddNewContactController implements IDataStateModalController {
 
     @FXML
     private TextField userName;
-    private ChatClient client;
-    private ContactList contactList;
+
     private Stage dialogStage;
-    private Main mainApp;
+    private DataState dataState;
+
     private boolean okClicked = false;
-
-    @FXML
-    private void initialize() {
-
-    }
 
     public void setDialogStage(Stage dialogStage) {
         this.dialogStage = dialogStage;
@@ -53,10 +42,9 @@ public class AddNewContactController {
     private boolean isInputValid()  {
         String errorMessage = "";
         try {
-            UserInfo contact = client.getUserInfo(userName.getText());
+            UserInfo contact = dataState.getUser(userName.getText());
             System.out.println(userName.toString() + "wird der Kontaktliste hinzugefügt");
-            saveContactinDHT(contact);
-
+            dataState.addContact(contact);
         } catch (Exception e) {
             e.printStackTrace();
             errorMessage = "User " + userName.getText() + " wurde nicht gefunden! Username überprüfen.";
@@ -77,18 +65,8 @@ public class AddNewContactController {
         }
     }
 
-    private void saveContactinDHT(UserInfo contact) throws Exception {
-        List<UserInfo> list = contactList.getContacts();
-        //List<UserInfo> list = contactList.contactsAsObservableList();
-        list.add(contact);
-        contactList.setContacts(list);
-        client.saveContactList(contactList);
-    }
-
-
-    public void setMainApp(Main mainApp) throws Exception {
-        this.mainApp = mainApp;
-        this.client = mainApp.getChatClient();
-        this.contactList = client.getContactList();
+    @Override
+    public void setState(Main mainApp, DataState state) {
+        this.dataState = state;
     }
 }

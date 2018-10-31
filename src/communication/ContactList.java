@@ -1,9 +1,5 @@
 package communication;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import org.omg.CosNaming.NamingContextPackage.NotFound;
-
 import java.util.ArrayList;
 import java.util.List;
 

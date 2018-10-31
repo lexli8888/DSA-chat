@@ -1,31 +1,21 @@
 package sample.controller;
 
-import communication.*;
 import javafx.fxml.FXML;
 import sample.Main;
-import sample.model.Person;
 
 import javafx.scene.control.TextField;
 import javafx.scene.control.Label;
-import sample.model.UserSetting;
-import sun.security.rsa.RSAPublicKeyImpl;
+import sample.state.DataState;
 
-import java.awt.*;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.security.*;
 
-public class StartupDialogController {
-
-    private ISerializationStrategy serializationStrategy;
+public class StartupDialogController implements IDataStateController {
 
     private Main mainApp;
+    private DataState dataState;
 
-    private ChatClient client;
-
-    public StartupDialogController() throws IOException {}
+    public StartupDialogController() throws IOException {
+    }
 
     @FXML
     private TextField FirstName;
@@ -39,13 +29,6 @@ public class StartupDialogController {
     @FXML
     private Label ErrorMsg;
 
-
-    @FXML
-    private void initialize() throws IOException{
-        serializationStrategy = new JsonSerializationStrategy();
-    }
-
-
     @FXML
     void handleStartup() throws Exception {
 
@@ -54,19 +37,10 @@ public class StartupDialogController {
         String userName = UserName.getText();
 
 
-
-        if(!userName.isEmpty() && !firstName.isEmpty() && !lastName.isEmpty()){
-            KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
-            KeyPair keyPair = generator.generateKeyPair();
-
-            UserInfo user = UserInfo.New(keyPair.getPublic(), userName, firstName, lastName);
-            if (client.register(user, keyPair)) {
-                createKeyFile(keyPair, userName, firstName, lastName);
-            } else {
-                ErrorMsg.setText("Benutzername vergeben");
-            }
+        if (!userName.isEmpty() && !firstName.isEmpty() && !lastName.isEmpty()) {
+            dataState.register(userName, firstName, lastName);
         } else {
-            ErrorMsg.setText("Bitte Vorname und Nachname angeben");
+            ErrorMsg.setText("Bitte Benutzername, Vorname und Nachname angeben");
         }
 
         try {
@@ -76,29 +50,11 @@ public class StartupDialogController {
         }
     }
 
-    private void createKeyFile(KeyPair keyPair, String username, String firstname, String lastname) {
-            UserSetting user = new UserSetting(keyPair, username, firstname, lastname);
 
-            String path = System.getProperty("user.home") + File.separator + "DSA-Chat";
-            File customDir = new File(path);
-
-            customDir.mkdirs();
-            try {
-                File keyFile = new File(path + File.separator + "key.txt");
-                BufferedWriter writer = new BufferedWriter(new FileWriter(keyFile));
-                writer.write(serializationStrategy.serialize(user));
-                writer.close();
-                keyFile.createNewFile();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        System.out.println(customDir + " was created");
-
-    }
-
-    public void setMainApp(Main mainApp) {
+    @Override
+    public void setState(Main mainApp, DataState state) {
+        this.dataState = state;
         this.mainApp = mainApp;
-        this.client = mainApp.getChatClient();
     }
 }
 

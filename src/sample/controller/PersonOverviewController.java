@@ -1,24 +1,16 @@
 package sample.controller;
 
-import communication.ChatClient;
-import communication.ContactList;
 import communication.UserInfo;
-import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import sample.Main;
-import sample.model.Person;
-import sample.util.DateUtil;
+import sample.state.DataState;
 
-import java.util.List;
-
-public class PersonOverviewController {
+public class PersonOverviewController implements IDataStateController {
     @FXML
     private TableView<UserInfo> personTable;
     @FXML
@@ -31,11 +23,8 @@ public class PersonOverviewController {
     @FXML
     private Label userNameLabel;
 
-
     private Main mainApp;
-    private ChatClient client;
-    private ContactList contactList;
-
+    private DataState dataState;
 
     public PersonOverviewController() {
     }
@@ -53,41 +42,11 @@ public class PersonOverviewController {
     }
 
     @FXML
-    private void initialize() {
-        // Initialize the person table with the two columns.
-        //userNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getUsername()));
-        //userNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty("Demo"));
-        // contactList is null at this time
-        System.out.println(contactList);
-        //showPersonDetails(null);
-        //personTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> showPersonDetails(newValue));
-    }
-
-    public void setMainApp(Main mainApp) throws Exception {
-        this.mainApp = mainApp;
-        this.client = mainApp.getChatClient();
-        this.contactList = client.getContactList();
-
-        ObservableList<UserInfo> observableList = FXCollections.observableArrayList();
-        observableList.addAll(contactList.getContacts());
-
-        personTable.setItems(observableList);
-
-        userNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getUsername()));
-        showPersonDetails(null);
-        personTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> showPersonDetails(newValue));
-    }
-
-    @FXML
     private void handleDeletePerson() throws Exception {
         int selectedIndex = personTable.getSelectionModel().getSelectedIndex();
         if (selectedIndex >= 0) {
-            List<UserInfo> contacts = contactList.getContacts();
-            UserInfo userToRemove = personTable.getItems().get(selectedIndex);
-            contacts.remove(userToRemove);
-            contactList.setContacts(contacts);
-            client.saveContactList(contactList);
-            personTable.getItems().remove(selectedIndex);
+            UserInfo user = personTable.getItems().get(selectedIndex);
+            dataState.removeContact(user);
         } else {
             // Nothing selected.
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -101,7 +60,7 @@ public class PersonOverviewController {
     }
 
     @FXML
-    private void handleNewPerson() {
+    private void handleNewPerson() throws Exception {
         boolean okClicked = mainApp.addNewContactDialog();
         if (okClicked) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -115,5 +74,14 @@ public class PersonOverviewController {
     }
 
 
+    @Override
+    public void setState(Main mainApp, DataState state) {
+        this.dataState = state;
+        this.mainApp = mainApp;
 
+        personTable.setItems(state.getUsers());
+        userNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getUsername()));
+        showPersonDetails(null);
+        personTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> showPersonDetails(newValue));
+    }
 }

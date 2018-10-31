@@ -1,9 +1,8 @@
 package sample.controller;
 
 import communication.*;
-import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -11,13 +10,9 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import sample.Main;
+import sample.state.DataState;
 
-import java.util.List;
-
-/**
- * Created by a-003-ebr on 01.10.2018.
- */
-public class ChatOverviewController {
+public class ChatOverviewController implements IDataStateController {
 
     @FXML
     private TableView<ChatInfo> chatsTable;
@@ -29,29 +24,44 @@ public class ChatOverviewController {
     private TextArea inputTextArea;
 
     private Main mainApp;
-    private ChatClient client;
-    private ChatList chatList;
+    private DataState dataState;
+    private ObservableList<ChatMessage> messages;
+    private ListChangeListener<ChatMessage> messageListChangeListener;
 
     public ChatOverviewController() {
-    }
+        messageListChangeListener = new ListChangeListener<ChatMessage>() {
+            @Override
+            public void onChanged(Change<? extends ChatMessage> c) {
+                if (!c.next()) {
+                    return;
+                }
 
-
-    private void showChatMessages(ChatInfo chat) throws Exception {
-        if (chat != null) {
-            chatTextArea.clear();
-            List<ChatMessage> chatMessages = client.getMessages(chat);
-            if(chatMessages != null){
-                for(int i =0; i < chatMessages.size(); i++){
-                    chatTextArea.appendText(chatMessages.get(i).getSender().getUsername() + "> " + chatMessages.get(i).getText());
-
-                    chatTextArea.appendText("\n");
+                if (c.wasAdded()) {
+                    chatTextArea.clear();
+                    drawMessages();
                 }
             }
-        } else {
-            // chat is null, remove all the text.
-            chatTextArea.setText("");
+        };
+    }
+
+    private void drawMessages() {
+        for (ChatMessage message : messages) {
+            chatTextArea.appendText(message.getSender().getUsername() + "> " + message.getText() + "\n");
+        }
+    }
+
+    private void showChatMessages(ChatInfo chat) throws Exception {
+        if (messages != null) {
+            messages.removeListener(messageListChangeListener);
         }
 
+        chatTextArea.clear();
+
+        if (chat != null) {
+            messages = dataState.getMessages(chat);
+            drawMessages();
+            messages.addListener(messageListChangeListener);
+        }
     }
 
     @FXML
@@ -68,42 +78,21 @@ public class ChatOverviewController {
         });
     }
 
-    public void setMainApp(Main mainApp) throws Exception{
-        this.mainApp = mainApp;
-        this.client = mainApp.getChatClient();
-        this.chatList = client.getChatList();
-
-        ObservableList<ChatInfo> observableList = FXCollections.observableArrayList();
-        observableList.addAll(chatList.getChats());
-
-        chatsTable.setItems(observableList);
-    }
-
     @FXML
     private void handleDeleteChat() throws Exception {
         int selectedIndex = chatsTable.getSelectionModel().getSelectedIndex();
         if (selectedIndex >= 0) {
-            List<ChatInfo> chats = chatList.getChats();
-            ChatInfo chatToRemove = chatsTable.getItems().get(selectedIndex);
-            chats.remove(chatToRemove);
-            chatList.setChats(chats);
-            client.saveChatList(chatList);
-            chatsTable.getItems().remove(selectedIndex);
+            ChatInfo chat = chatsTable.getItems().get(selectedIndex);
+            dataState.removeChat(chat);
         } else {
             nothingSelected();
         }
     }
 
     @FXML
-    private void handleNewChat() {
+    private void handleNewChat() throws Exception {
         boolean okClicked = mainApp.addNewChatDialog();
         if (okClicked) {
-
-            ObservableList<ChatInfo> observableList = FXCollections.observableArrayList();
-            observableList.addAll(chatList.getChats());
-
-            chatsTable.setItems(observableList);
-
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.initOwner(mainApp.getPrimaryStage());
             alert.setTitle("Success");
@@ -127,30 +116,24 @@ public class ChatOverviewController {
             alert.showAndWait();
 
         } else if (selectedIndex < 0) {
-           nothingSelected();
+            nothingSelected();
 
         } else {
-                ChatInfo chat = chatsTable.getSelectionModel().getSelectedItem();
-                // Schreibt (auf localhost) zurzeit als Absender noch ein null object, darum können keine Chats verschickt werden.
-                ChatMessage message = ChatMessage.New(client.getUserInfo(mainApp.getUserName()), inputTextArea.getText());
-                inputTextArea.setText("");
-                if(client.sendMessage(chat, message)){
-                    showChatMessages(chat);
-                }
-                else{
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.initOwner(mainApp.getPrimaryStage());
-                    alert.setTitle("Message Warning");
-                    alert.setHeaderText("Message not sent");
-                    alert.setContentText("Houston, we have a problem. Check your Network settings and retry to send the message.");
+            ChatInfo chat = chatsTable.getSelectionModel().getSelectedItem();
+            // Schreibt (auf localhost) zurzeit als Absender noch ein null object, darum können keine Chats verschickt werden.
+            if (!dataState.sendMessage(chat, inputTextArea.getText())) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.initOwner(mainApp.getPrimaryStage());
+                alert.setTitle("Message Warning");
+                alert.setHeaderText("Message not sent");
+                alert.setContentText("Houston, we have a problem. Check your Network settings and retry to send the message.");
 
-                    alert.showAndWait();
-                }
+                alert.showAndWait();
+            } else {
+                inputTextArea.clear();
             }
+        }
     }
-
-
-
 
 
     private void nothingSelected() {
@@ -162,5 +145,13 @@ public class ChatOverviewController {
         alert.setContentText("Please select a chat in the table.");
 
         alert.showAndWait();
+    }
+
+    @Override
+    public void setState(Main mainApp, DataState state) {
+        this.mainApp = mainApp;
+        this.dataState = state;
+
+        chatsTable.setItems(state.getChats());
     }
 }

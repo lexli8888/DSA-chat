@@ -1,7 +1,8 @@
 package sample.model;
 
+import communication.UserInfo;
+
 import java.security.KeyPair;
-import java.security.PublicKey;
 
 public class UserSetting {
     private KeyPair keyPair;
@@ -18,7 +19,9 @@ public class UserSetting {
         this.lastName = lastName;
     }
 
-
+    public UserInfo toUserInfo() {
+        return UserInfo.New(keyPair.getPublic(), username, firstName, lastName);
+    }
 
     public KeyPair getKeyPair() {
         return keyPair;

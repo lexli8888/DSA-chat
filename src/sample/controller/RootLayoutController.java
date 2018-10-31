@@ -1,21 +1,17 @@
 package sample.controller;
 
-import communication.ChatClient;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import sample.Main;
 
-/**
- * Created by a-003-ebr on 01.10.2018.
- */
+import java.io.IOException;
+
 public class RootLayoutController {
 
     private Main mainApp;
-    private ChatClient client;
 
     public void setMainApp(Main mainApp) {
         this.mainApp = mainApp;
-        this.client = mainApp.getChatClient();
     }
 
     @FXML
@@ -34,14 +30,14 @@ public class RootLayoutController {
     }
 
     @FXML
-    private void handleShowChatOverview() {
+    private void handleShowChatOverview() throws IOException {
         System.out.println("Chat");
         mainApp.showChatOverview();
 
     }
 
     @FXML
-    private void handleShowAddressBookOverview() {
+    private void handleShowAddressBookOverview() throws IOException {
         System.out.println("Address Book");
         mainApp.showPersonOverview();
 

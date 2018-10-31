@@ -1,10 +1,7 @@
 package communication;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import javafx.beans.property.StringProperty;
-
 import java.security.*;
-import java.util.Base64;
 
 public class UserInfo {
     private PublicKey publicKey;
@@ -16,13 +13,18 @@ public class UserInfo {
 
     }
 
-    public static UserInfo New(PublicKey publicKey, String username, String firstName, String lastName) throws NoSuchAlgorithmException {
+    public static UserInfo New(PublicKey publicKey, String username, String firstName, String lastName) {
         UserInfo info = new UserInfo();
         info.publicKey = publicKey;
         info.username = username;
         info.firstName = firstName;
         info.lastName = lastName;
         return info;
+    }
+
+    @Override
+    public String toString() {
+        return this.username;
     }
 
     @JsonIgnore

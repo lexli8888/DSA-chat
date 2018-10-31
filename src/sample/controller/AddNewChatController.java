@@ -8,31 +8,23 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import sample.Main;
+import sample.state.DataState;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
-/**
- * Created by a-003-ebr on 08.10.2018.
- */
-public class AddNewChatController {
+public class AddNewChatController implements IDataStateModalController {
 
     @FXML
     private CheckComboBox<UserInfo> memberComboBox;
     @FXML
     private TextField titleField;
 
-    private ChatClient client;
-    private ChatList chatList;
-    private ContactList contactList;
+    private DataState dataState;
     private Stage dialogStage;
-    private Main mainApp;
+
     private boolean okClicked = false;
 
-    @FXML
-    private void initialize() {
-
-    }
 
     public void setDialogStage(Stage dialogStage) {
         this.dialogStage = dialogStage;
@@ -46,7 +38,6 @@ public class AddNewChatController {
     @FXML
     private void handleOk() {
         if (isInputValid()) {
-
             okClicked = true;
             dialogStage.close();
         }
@@ -64,12 +55,10 @@ public class AddNewChatController {
 
         try {
             ChatInfo chat = ChatInfo.New(titleField.getText());
-            client.createChat(chat);
-            saveChatinDHT(chat);
+            dataState.addChat(chat);
             List<UserInfo> invites = memberComboBox.getCheckModel().getCheckedItems();
-            //client.inviteChatMember(chat, client.getUserInfo(mainApp.getUserName()));
-            for(UserInfo user : invites){
-                client.inviteChatMember(chat, user);
+            for (UserInfo user : invites) {
+                dataState.inviteChatMember(chat, user);
             }
             System.out.println(chat.getTitle() + " wird der Chatliste hinzugefügt");
 
@@ -96,38 +85,27 @@ public class AddNewChatController {
         }
     }
 
-    private void saveChatinDHT(ChatInfo chat) throws Exception {
-        List<ChatInfo> list = chatList.getChats();
-        list.add(chat);
-        chatList.setChats(list);
-        client.saveChatList(chatList);
-    }
+    @Override
+    public void setState(Main mainApp, DataState state) {
+        this.dataState = state;
 
-
-    public void setMainApp(Main mainApp) throws Exception{
-        this.mainApp = mainApp;
-        this.client = mainApp.getChatClient();
-        this.chatList = mainApp.getChatList();
-        this.contactList = client.getContactList();
-        // Insert contactList as Observable but not in Class
-        //memberComboBox.getItems().addAll(contactList.contactsAsObservableList());
-        memberComboBox.getItems().addAll(contactList.getContacts());
-        memberComboBox.setConverter(new StringConverter<UserInfo>() {
-            @Override
-            public String toString(UserInfo user) {
-                return user.getUsername();
-            }
-
-            @Override
-            public UserInfo fromString(String username) {
-                try {
-                    return contactList.searchUser(username);
-                    //return client.getUserInfo(username);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    return null;
-                }
-            }
-        });
+//        memberComboBox.setConverter(new StringConverter<UserInfo>() {
+//            @Override
+//            public String toString(UserInfo user) {
+//                return user.getUsername();
+//            }
+//
+//            @Override
+//            public UserInfo fromString(String username) {
+//                try {
+//                    return contactList.searchUser(username);
+//                    //return client.getUserInfo(username);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    return null;
+//                }
+//            }
+//        });
+        this.memberComboBox.getItems().addAll(this.dataState.getUsers());
     }
 }
