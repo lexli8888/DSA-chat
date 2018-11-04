@@ -42,9 +42,15 @@ public class Main extends Application {
         if (this.dataState.init()) {
             initRootLayout();
             showChatOverview();
+            client.setOnlineStatus("Online");
         } else {
             showStartupDialog();
         }
+    }
+
+    @Override
+    public void stop() throws IOException {
+       client.setOnlineStatus("Offline");
     }
 
     public void initRootLayout() {

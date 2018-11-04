@@ -3,18 +3,19 @@ package sample.controller;
 import communication.UserInfo;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import sample.Main;
 import sample.state.DataState;
+
+import java.io.IOException;
 
 public class PersonOverviewController implements IDataStateController {
     @FXML
     private TableView<UserInfo> personTable;
     @FXML
     private TableColumn<UserInfo, String> userNameColumn;
+    @FXML
+    private TableColumn<UserInfo, String> statusColumn;
 
     @FXML
     private Label firstNameLabel;
@@ -81,7 +82,16 @@ public class PersonOverviewController implements IDataStateController {
 
         personTable.setItems(state.getUsers());
         userNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getUsername()));
+        statusColumn.setCellValueFactory(cellData -> {
+            try {
+                return new SimpleStringProperty(dataState.getOnlineStatus(cellData.getValue().getUsername()));
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        });
         showPersonDetails(null);
         personTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> showPersonDetails(newValue));
+
     }
 }

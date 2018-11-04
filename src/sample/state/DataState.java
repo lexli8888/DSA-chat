@@ -9,6 +9,7 @@ import sample.model.UserSetting;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.util.HashMap;
@@ -166,6 +167,10 @@ public class DataState {
         ContactList contactList = new ContactList();
         contactList.setContacts(Lists.newArrayList(users.iterator()));
         client.saveContactList(contactList);
+    }
+
+    public String getOnlineStatus(String username) throws IOException, ClassNotFoundException {
+        return client.getOnlineStatus(username);
     }
 
     public ObservableList<UserInfo> getUsers() {
