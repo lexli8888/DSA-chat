@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="200.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.ChatInvitesController">
+   <children>
+      <AnchorPane layoutX="1.0" layoutY="41.0" prefHeight="159.0" prefWidth="200.0">
+         <children>
+            <TableView fx:id="invitesTable" layoutY="-36.0" prefHeight="159.0" prefWidth="200.0">
+              <columns>
+                <TableColumn fx:id="invitesColumn" prefWidth="200" text="Chateinladungen" />
+              </columns>
+            </TableView>
+            <Button layoutY="123.0" mnemonicParsing="false" text="Annehmen" onAction="#handleAccept" />
+            <Button layoutX="121.0" layoutY="123.0" mnemonicParsing="false" text="Ablehnen" onAction="#handleDecline"/>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

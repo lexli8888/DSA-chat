@@ -12,6 +12,8 @@ import javafx.scene.control.TextArea;
 import sample.Main;
 import sample.state.DataState;
 
+import java.io.IOException;
+
 public class ChatOverviewController implements IDataStateController {
 
     @FXML
@@ -153,5 +155,29 @@ public class ChatOverviewController implements IDataStateController {
         this.dataState = state;
 
         chatsTable.setItems(state.getChats());
+
+        handleChatInvites();
+
+    }
+
+    public void handleChatInvites(){
+        if(dataState.getChatInvites().size() > 0){
+            try {
+                boolean noMoreInvites = mainApp.showChatInvites();
+                if(noMoreInvites){
+                    chatsTable.setItems(dataState.getChats());
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.initOwner(mainApp.getPrimaryStage());
+                    alert.setTitle("Chat Einladungne");
+                    alert.setHeaderText("Keine neuen Einladungen vorhanden");
+                    alert.setContentText("Du hast keine neuen Einladungen mehr.");
+
+                    alert.showAndWait();
+                }
+            } catch (Exception e){
+                System.out.println(e.getStackTrace());
+            }
+
+        }
     }
 }

@@ -122,6 +122,10 @@ public class Main extends Application {
         return showModal("view/ChatEditDialog.fxml", "New Chat");
     }
 
+    public boolean showChatInvites() throws IOException{
+        return showModal("view/ChatInvites.fxml", "Chat invites");
+    }
+
     @FXML
     public void showStartupDialog() {
         try {
