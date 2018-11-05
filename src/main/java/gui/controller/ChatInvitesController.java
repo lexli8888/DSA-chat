@@ -1,15 +1,14 @@
-package sample.controller;
+package gui.controller;
 
 import communication.ChatInfo;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
-import sample.Main;
-import sample.state.DataState;
+import gui.Main;
+import gui.state.DataState;
 
 
 public class ChatInvitesController implements IDataStateModalController {
