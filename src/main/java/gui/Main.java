@@ -42,9 +42,15 @@ public class Main extends Application {
         if (this.dataState.init()) {
             initRootLayout();
             showChatOverview();
+            client.setOnlineStatus("Online");
         } else {
             showStartupDialog();
         }
+    }
+
+    @Override
+    public void stop() throws IOException {
+       client.setOnlineStatus("Offline");
     }
 
     public void initRootLayout() {
@@ -120,6 +126,10 @@ public class Main extends Application {
 
     public boolean addNewChatDialog() throws IOException {
         return showModal("/view/ChatEditDialog.fxml", "New Chat");
+    }
+
+    public boolean showChatInvites() throws IOException{
+        return showModal("view/ChatInvites.fxml", "Chat invites");
     }
 
     @FXML

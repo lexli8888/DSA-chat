@@ -9,8 +9,10 @@ import gui.model.UserSetting;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.security.KeyPair;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Scanner;
 
 public class DataState {
@@ -24,6 +26,7 @@ public class DataState {
 
     private ObservableList<UserInfo> users = FXCollections.observableArrayList();
     private ObservableList<ChatInfo> chats = FXCollections.observableArrayList();
+    private ObservableList<ChatInfo> chatInvites = FXCollections.observableArrayList();
     private HashMap<String, ObservableList<ChatMessage>> messages = new HashMap<>();
 
     public DataState(ChatClient client) {
@@ -85,6 +88,11 @@ public class DataState {
 
         ContactList contactList = client.getContactList();
         users.addAll(contactList.getContacts());
+
+        List<ChatInfo> ChatInvites = client.getChatInvites();
+        chatInvites.addAll(ChatInvites);
+        // Chateinladungen hat immer wieder neue ID, darum kann ich sie nicht rauslöschen
+        //chatInvites.removeAll(chatList.getChats());
     }
 
     public boolean init() throws Exception {
@@ -126,6 +134,10 @@ public class DataState {
         client.saveChatList(chatList);
     }
 
+    public void removeInvite(ChatInfo chat) throws Exception{
+        chatInvites.remove(chat);
+    }
+
     public void inviteChatMember(ChatInfo chat, UserInfo user) throws Exception {
         client.inviteChatMember(chat, user);
     }
@@ -156,11 +168,15 @@ public class DataState {
         client.saveContactList(contactList);
     }
 
+    public String getOnlineStatus(String username) throws IOException, ClassNotFoundException {
+        return client.getOnlineStatus(username);
+    }
+
     public ObservableList<UserInfo> getUsers() {
         return users;
     }
 
-    public ObservableList<ChatInfo> getChats() {
-        return chats;
-    }
+    public ObservableList<ChatInfo> getChats() { return chats; }
+
+    public ObservableList<ChatInfo> getChatInvites() { return  chatInvites;}
 }

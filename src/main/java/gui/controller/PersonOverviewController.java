@@ -15,6 +15,8 @@ public class PersonOverviewController implements IDataStateController {
     private TableView<UserInfo> personTable;
     @FXML
     private TableColumn<UserInfo, String> userNameColumn;
+    @FXML
+    private TableColumn<UserInfo, String> statusColumn;
 
     @FXML
     private Label firstNameLabel;
@@ -81,7 +83,16 @@ public class PersonOverviewController implements IDataStateController {
 
         personTable.setItems(state.getUsers());
         userNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getUsername()));
+        statusColumn.setCellValueFactory(cellData -> {
+            try {
+                return new SimpleStringProperty(dataState.getOnlineStatus(cellData.getValue().getUsername()));
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        });
         showPersonDetails(null);
         personTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> showPersonDetails(newValue));
+
     }
 }

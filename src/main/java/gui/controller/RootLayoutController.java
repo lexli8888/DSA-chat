@@ -15,7 +15,8 @@ public class RootLayoutController {
     }
 
     @FXML
-    private void handleExit() {
+    private void handleExit() throws IOException {
+        mainApp.stop();
         System.exit(0);
     }
 
