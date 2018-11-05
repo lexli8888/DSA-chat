@@ -1,6 +1,46 @@
 # DSA-chat
 
-## Goals
+## Setup overview
+
+The repository contains a JavaFX frontend and unit tests for all networking operations. The dependecies are managed by maven in the pom.xml in the root folder. 
+
+**Bootstrap Server**
+The bootstrap server is required to connect the individual peers to each other. Per default it listens on all interfaces on port 4000.
+
+**GUI**
+On the first startup of the GUI application allows the user to register a new user profile. After successfull registration the user profile including the private key gets stored on the local harddrive under $HOME/DSA-Chat/key.txt. During startup it tries to connect to the bootstrap server which is per default on the localhost at port 4000.
+
+**Unit Tests**
+The GUI application does not implement all available functionality yet, but the unit tests checks most of the functionality already.
+
+## Project status
+
+- [x] Registration of users
+- [x] Fetch and save contact list
+- [x] Search for other users
+- [x] Create (group) chats
+- [x] Send messages
+- [x] Offline messages
+- [x] Unit tests for basic operations
+- [x] Bootstrap over local LAN
+- [ ] Poll for new messages
+- [ ] Send message direct to peer instant over DHT
+- [ ] Bootstrap over NAT
+- [ ] Smart Contact File Notary
+
+## Start GUI
+1. Make sure all maven dependencies are installed
+2. Start the bootstrap server (src/main/communication/BootstrapServer.java) over console `mvn exec:java -Dexec.mainClass="communication.BootstrapServer"` or your IDE of choice
+3. Start the frontend (src/main/gui/Main.java) over console `mvn exec:java -Dexec.mainClass="gui.Main"` or your IDE of choice
+
+
+## Start unit tests
+1. Make sure all maven dependencies are installed
+2. Select a unit test class in the src/test/java folder.
+2. Run the test class with junit over console with `mvn clean test` or your IDE of choice
+
+
+## Project goals
 * A user can be registered by a unique username
 * A user can set his onlinestatus visible to everyone
 * A user can search other users by username and lookup their public key
@@ -12,9 +52,11 @@
 * A user can store a list of his chats
 * A message can be stored offline for one week
 
-## User
+## Communication API
 
-### Register User
+### User
+
+#### Register User
 
 **Parameter**
 
@@ -38,7 +80,7 @@
 	1. If action was successfull, user is registered, set online status immediately
 	2. If action was unsuccessfull, username is already taken
 
-### Search User
+#### Search User
 
 **Parameter**
 
@@ -59,7 +101,7 @@
 	1. If action was successfull user exists and the content is the public key of the searched user
 	2. If action was unsuccessfull user does not exist
 
-### Set Online Status
+#### Set Online Status
 
 **Parameter**
 
@@ -87,7 +129,7 @@
 
 > Online status can be viewed by anyone, an option could be to encrypt the status, but this would require to share some key with our contacts
 
-### Get Online Status
+#### Get Online Status
 
 **Parameter**
 
@@ -107,9 +149,9 @@
 1. Try fetch the onlinestatus by locationKey = hash([username]), contentKey = "onlinestatus"
 2. If one exists, check if the signature matches with the user [pubkey]
 
-## Contact List
+### Contact List
 
-### Get Contact List
+#### Get Contact List
 
 **Parameter**
 
@@ -130,7 +172,7 @@
 2. Decrypt content value with [privkey]
 
 
-### Add Contact to Contact List
+#### Add Contact to Contact List
 
 **Parameter**
 
@@ -156,7 +198,7 @@
 4. Encrypt list content with [pubkey]
 5. Store new contactlist value with contentKey = hash([username]), locationKey = "contactlist"
 
-### Remove Contact from Contact List
+#### Remove Contact from Contact List
 
 **Parameter**
 
@@ -181,9 +223,9 @@
 4. Encrypt list content with [pubkey]
 5. Store new contactlist value with contentKey = hash([username]), locationKey = "contactlist"
 
-## Chat
+### Chat
 
-### Create Chat
+#### Create Chat
 
 **Parameter**
 
@@ -214,7 +256,7 @@
 
 > If an already invited user becomes untrusted, a new chat has to be created with all other users except the untrusted.
 
-### Send Chat Invite
+#### Send Chat Invite
 
 **Parameter**
 
@@ -239,7 +281,7 @@
 1. Try to store invite with locationKey = hash([invite_username] + "-invite"), contentKey = [inviteid] with TTL to cleanup old invites on its own
 2. Wait for users response
 
-### Accept Chat Invite
+#### Accept Chat Invite
 
 **Parameter**
 
@@ -263,7 +305,7 @@
 3. Send joining message to chat
 4. Wait for TTL to delete invite on its own, because it is protected by the inviter
 
-### Decline Chat Invite
+#### Decline Chat Invite
 
 **Parameter**
 
@@ -284,7 +326,7 @@
 1. Try to fetch open invites with own [username]
 2. If invite is found and declined, wait for TTL to delete invite on its own, because it is protected by the inviter
 
-### Send Chat Message
+#### Send Chat Message
 
 **Parameter**
 
@@ -319,7 +361,7 @@
 
 > The owner if the message can always be verified by the signature
 
-### Retrive Chat Message
+#### Retrive Chat Message
 
 
 **Parameter**
@@ -341,18 +383,4 @@
 **Steps**
 
 1. Fetch all stores values and verify the messages based on signature and protection keys, encrypt content with [chatprivkey]
-
-
-**Project Setup**
-
->1. Open .iml File with Intelij
->2. Go to File -> Project structure
->3. Set SDK under Plattform settings (JDK < 9)
->4. Choose Project SDK under Project Settings -> Project, Project language level: 8
->5. Project Settings -> Modules: If nothing exists add and choose the .iml File
->6. Add/Edit Run Configuration: 
->. Type: Application
->. Main class: sample.Main
->. Classpath of module: DSA-chat
->. JRE: Default
 
