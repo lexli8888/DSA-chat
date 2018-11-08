@@ -112,3 +112,5 @@ hs_err_pid*
 
 database
 logs
+.idea
+.DS_Store
