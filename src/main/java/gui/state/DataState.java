@@ -88,11 +88,38 @@ public class DataState {
 
         ContactList contactList = client.getContactList();
         users.addAll(contactList.getContacts());
+    }
 
-        List<ChatInfo> ChatInvites = client.getChatInvites();
-        chatInvites.addAll(ChatInvites);
-        // Chateinladungen hat immer wieder neue ID, darum kann ich sie nicht rauslöschen
-        //chatInvites.removeAll(chatList.getChats());
+    public void loadChatMessages(ChatInfo chat) throws Exception {
+        List<ChatMessage> newMessages = client.getMessages(chat);
+        if (!messages.containsKey(chat.getId())) {
+            ObservableList<ChatMessage> observableList = FXCollections.observableArrayList();
+            observableList.addAll(newMessages);
+            messages.put(chat.getId(), observableList);
+        } else {
+            ObservableList<ChatMessage> observableList = messages.get(chat.getId());
+            observableList.clear();
+            observableList.addAll(newMessages);
+        }
+    }
+
+    public void loadChatInvites() throws Exception {
+        chatInvites.clear();
+
+        List<ChatInfo> chatInvites = client.getChatInvites();
+        for (ChatInfo chatInvite : chatInvites) {
+            boolean alreadyExists = false;
+            for (ChatInfo chat : chats) {
+                if (chat.getId().equals(chatInvite.getId())) {
+                    alreadyExists = true;
+                    break;
+                }
+            }
+
+            if (!alreadyExists) {
+                chatInvites.add(chatInvite);
+            }
+        }
     }
 
     public boolean init() throws Exception {
@@ -134,7 +161,7 @@ public class DataState {
         client.saveChatList(chatList);
     }
 
-    public void removeInvite(ChatInfo chat) throws Exception{
+    public void removeInvite(ChatInfo chat) throws Exception {
         chatInvites.remove(chat);
     }
 
@@ -176,7 +203,11 @@ public class DataState {
         return users;
     }
 
-    public ObservableList<ChatInfo> getChats() { return chats; }
+    public ObservableList<ChatInfo> getChats() {
+        return chats;
+    }
 
-    public ObservableList<ChatInfo> getChatInvites() { return  chatInvites;}
+    public ObservableList<ChatInfo> getChatInvites() {
+        return chatInvites;
+    }
 }

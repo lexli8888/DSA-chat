@@ -13,9 +13,23 @@ import communication.ChatMessage;
 import gui.Main;
 import gui.state.DataState;
 
-import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class ChatOverviewController implements IDataStateController {
+
+    class RefreshMessages extends TimerTask {
+        @Override
+        public void run() {
+            if(selectedChat != null) {
+                try {
+                    dataState.loadChatMessages(selectedChat);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 
     @FXML
     private TableView<ChatInfo> chatsTable;
@@ -26,8 +40,10 @@ public class ChatOverviewController implements IDataStateController {
     @FXML
     private TextArea inputTextArea;
 
+    private Timer messageTimer;
     private Main mainApp;
     private DataState dataState;
+    private ChatInfo selectedChat;
     private ObservableList<ChatMessage> messages;
     private ListChangeListener<ChatMessage> messageListChangeListener;
 
@@ -45,6 +61,9 @@ public class ChatOverviewController implements IDataStateController {
                 }
             }
         };
+
+        messageTimer = new Timer();
+        messageTimer.schedule(new RefreshMessages(), 0, 5000);
     }
 
     private void drawMessages() {
@@ -65,6 +84,8 @@ public class ChatOverviewController implements IDataStateController {
             drawMessages();
             messages.addListener(messageListChangeListener);
         }
+
+        selectedChat = chat;
     }
 
     @FXML

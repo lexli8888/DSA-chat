@@ -23,7 +23,7 @@ The GUI application does not implement all available functionality yet, but the 
 - [x] Offline messages
 - [x] Unit tests for basic operations
 - [x] Bootstrap over local LAN
-- [ ] Poll for new messages
+- [x] Poll for new messages
 - [ ] Send message direct to peer instant over DHT
 - [ ] Bootstrap over NAT
 - [ ] Smart Contact File Notary
