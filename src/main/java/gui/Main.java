@@ -129,7 +129,15 @@ public class Main extends Application {
     }
 
     public boolean showChatInvites() throws Exception {
-        return showModal("view/ChatInvites.fxml", "Chat invites");
+        return showModal("/view/ChatInvites.fxml", "Chat invites");
+    }
+
+    public boolean addNotariatFile() throws Exception{
+        return showModal("/view/AddNotariatFile.fxml", "Add notariat file");
+    }
+
+    public boolean showNotariat() throws Exception{
+        return showModal("/view/Notariat.fxml", "Notariat service");
     }
 
     @FXML
