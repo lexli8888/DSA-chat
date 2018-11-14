@@ -40,7 +40,7 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
                     </rowConstraints>
                     <children>
                         <Label text="Username" GridPane.columnIndex="0" GridPane.rowIndex="0" />
@@ -49,6 +49,7 @@
                         <Label fx:id="userNameLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="0" />
                         <Label fx:id="firstNameLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <Label fx:id="lastNameLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Button fx:id="notariatButton" onAction="#showNotariat" text="Notariat anzeigen" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
                     </children>
                   </GridPane>
                   <ButtonBar layoutX="203.0" layoutY="244.0" prefHeight="40.0" prefWidth="200.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0">

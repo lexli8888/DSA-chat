@@ -3,7 +3,10 @@ package gui.controller;
 import communication.UserInfo;
 import gui.util.AlertFactory;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -25,6 +28,8 @@ public class PersonOverviewController implements IDataStateController {
     private Label lastNameLabel;
     @FXML
     private Label userNameLabel;
+    @FXML
+    private Button notariatButton;
 
     private Main mainApp;
     private DataState dataState;
@@ -41,7 +46,9 @@ public class PersonOverviewController implements IDataStateController {
         } else {
             userNameLabel.setText("");
             firstNameLabel.setText("");
-            lastNameLabel.setText("");       }
+            lastNameLabel.setText("");
+            notariatButton.setUserData(user);
+        }
     }
 
     @FXML
@@ -87,5 +94,11 @@ public class PersonOverviewController implements IDataStateController {
         showPersonDetails(null);
         personTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> showPersonDetails(newValue));
 
+    }
+
+    @FXML
+    public void showNotariat() throws Exception {
+        UserInfo user = (UserInfo) notariatButton.getUserData();
+        mainApp.showNotariat();
     }
 }
