@@ -1,6 +1,7 @@
 package gui.controller;
 
 import communication.UserInfo;
+import gui.util.AlertFactory;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
@@ -57,12 +58,8 @@ public class AddNewContactController implements IDataStateModalController {
             return true;
         } else {
             // Show the error message.
-            Alert alert = new Alert(Alert.AlertType.ERROR);
+            Alert alert = AlertFactory.ErrorAlert("Invalid Fields", errorMessage);
             alert.initOwner(dialogStage);
-            alert.setTitle("Invalid Fields");
-            alert.setHeaderText("Ungültiger Username");
-            alert.setContentText(errorMessage);
-
             alert.showAndWait();
 
             return false;

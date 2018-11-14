@@ -2,6 +2,7 @@ package gui.controller;
 
 import communication.ChatInfo;
 import communication.UserInfo;
+import gui.util.AlertFactory;
 import org.controlsfx.control.CheckComboBox;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -73,12 +74,8 @@ public class AddNewChatController implements IDataStateModalController {
             return true;
         } else {
             // Show the error message.
-            Alert alert = new Alert(Alert.AlertType.ERROR);
+            Alert alert = AlertFactory.ErrorAlert("Invalid Fields", errorMessage);
             alert.initOwner(dialogStage);
-            alert.setTitle("Invalid Fields");
-            alert.setHeaderText("Ungültige Eingabe");
-            alert.setContentText(errorMessage);
-
             alert.showAndWait();
 
             return false;

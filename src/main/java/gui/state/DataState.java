@@ -106,7 +106,7 @@ public class DataState {
     public void loadChatInvites() throws Exception {
         chatInvites.clear();
 
-        List<ChatInfo> chatInvites = client.getChatInvites();
+        List<ChatInfo> chatInvitesHistory = client.getChatInvites();
         for (ChatInfo chatInvite : chatInvites) {
             boolean alreadyExists = false;
             for (ChatInfo chat : chats) {
@@ -207,7 +207,8 @@ public class DataState {
         return chats;
     }
 
-    public ObservableList<ChatInfo> getChatInvites() {
+    public ObservableList<ChatInfo> getChatInvites() throws Exception {
+        loadChatInvites();
         return chatInvites;
     }
 }

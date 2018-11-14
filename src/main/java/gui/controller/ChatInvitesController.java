@@ -1,6 +1,7 @@
 package gui.controller;
 
 import communication.ChatInfo;
+import gui.util.AlertFactory;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -41,7 +42,7 @@ public class ChatInvitesController implements IDataStateModalController {
     }
 
     @Override
-    public void setState(Main mainApp, DataState state) {
+    public void setState(Main mainApp, DataState state) throws Exception {
         this.dataState = state;
         this.main = mainApp;
 
@@ -60,11 +61,7 @@ public class ChatInvitesController implements IDataStateModalController {
 
     private void nothingSelected() {
         // Nothing selected.
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("No Selection");
-        alert.setHeaderText("No Chat Selected");
-        alert.setContentText("Please select a chat in the table.");
-
+        Alert alert = AlertFactory.InformationAlert("No Selection", "Please select a chat in the table");
         alert.showAndWait();
     }
 
@@ -83,7 +80,7 @@ public class ChatInvitesController implements IDataStateModalController {
         }
     }
 
-    private void checkRemainingInvites(){
+    private void checkRemainingInvites() throws Exception {
         if(dataState.getChatInvites().size() == 0){
             okClicked = true;
             dialogStage.close();

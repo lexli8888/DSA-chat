@@ -1,5 +1,6 @@
 package gui.controller;
 
+import gui.util.AlertFactory;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -117,12 +118,8 @@ public class ChatOverviewController implements IDataStateController {
     private void handleNewChat() throws Exception {
         boolean okClicked = mainApp.addNewChatDialog();
         if (okClicked) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            Alert alert = AlertFactory.InformationAlert("Success", "Ein neuer Chat wurde erfolgreich erstellt.");
             alert.initOwner(mainApp.getPrimaryStage());
-            alert.setTitle("Success");
-            alert.setHeaderText("Chat erstellt");
-            alert.setContentText("Ein neuer Chat wurde erfolgreich erstellt");
-
             alert.showAndWait();
         }
     }
@@ -131,12 +128,8 @@ public class ChatOverviewController implements IDataStateController {
     private void handleNewChatEntry() throws Exception {
         int selectedIndex = chatsTable.getSelectionModel().getSelectedIndex();
         if (inputTextArea.getText().isEmpty()) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
+            Alert alert = AlertFactory.InformationAlert("No Text", "Please write some text.");
             alert.initOwner(mainApp.getPrimaryStage());
-            alert.setTitle("No Text");
-            alert.setHeaderText("No text to send");
-            alert.setContentText("Please write some text.");
-
             alert.showAndWait();
 
         } else if (selectedIndex < 0) {
@@ -146,12 +139,8 @@ public class ChatOverviewController implements IDataStateController {
             ChatInfo chat = chatsTable.getSelectionModel().getSelectedItem();
             // Schreibt (auf localhost) zurzeit als Absender noch ein null object, darum können keine Chats verschickt werden.
             if (!dataState.sendMessage(chat, inputTextArea.getText())) {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
+                Alert alert = AlertFactory.WarningAlert("Message Warning", "Houston, we have a problem. Check your Network settings and retry to send the message.");
                 alert.initOwner(mainApp.getPrimaryStage());
-                alert.setTitle("Message Warning");
-                alert.setHeaderText("Message not sent");
-                alert.setContentText("Houston, we have a problem. Check your Network settings and retry to send the message.");
-
                 alert.showAndWait();
             } else {
                 inputTextArea.clear();
@@ -162,44 +151,18 @@ public class ChatOverviewController implements IDataStateController {
 
     private void nothingSelected() {
         // Nothing selected.
-        Alert alert = new Alert(Alert.AlertType.WARNING);
+        Alert alert = AlertFactory.WarningAlert("No Selection", "Please select a chat in the table.");
         alert.initOwner(mainApp.getPrimaryStage());
-        alert.setTitle("No Selection");
-        alert.setHeaderText("No Chat Selected");
-        alert.setContentText("Please select a chat in the table.");
-
         alert.showAndWait();
     }
 
     @Override
-    public void setState(Main mainApp, DataState state) {
+    public void setState(Main mainApp, DataState state) throws Exception {
         this.mainApp = mainApp;
         this.dataState = state;
 
         chatsTable.setItems(state.getChats());
 
-        handleChatInvites();
-
     }
 
-    public void handleChatInvites(){
-        if(dataState.getChatInvites().size() > 0){
-            try {
-                boolean noMoreInvites = mainApp.showChatInvites();
-                if(noMoreInvites){
-                    chatsTable.setItems(dataState.getChats());
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.initOwner(mainApp.getPrimaryStage());
-                    alert.setTitle("Chat Einladungne");
-                    alert.setHeaderText("Keine neuen Einladungen vorhanden");
-                    alert.setContentText("Du hast keine neuen Einladungen mehr.");
-
-                    alert.showAndWait();
-                }
-            } catch (Exception e){
-                System.out.println(e.getStackTrace());
-            }
-
-        }
-    }
 }

@@ -65,7 +65,7 @@ public class Main extends Application {
 
             // Give the controller access to the main app.
             RootLayoutController controller = loader.getController();
-            controller.setMainApp(this);
+            controller.setMainApp(this, this.dataState);
 
             primaryStage.setScene(scene);
             primaryStage.setResizable(false);
@@ -75,7 +75,7 @@ public class Main extends Application {
         }
     }
 
-    private void showOverview(String resource) throws IOException {
+    private void showOverview(String resource) throws Exception {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource(resource));
         AnchorPane personOverview = loader.load();
@@ -86,7 +86,7 @@ public class Main extends Application {
         controller.setState(this, this.dataState);
     }
 
-    private boolean showModal(String resource, String title) throws IOException {
+    private boolean showModal(String resource, String title) throws Exception {
         // Load the fxml file and create a new stage for the popup dialog.
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource(resource));
@@ -111,24 +111,24 @@ public class Main extends Application {
     }
 
     @FXML
-    public void showPersonOverview() throws IOException {
+    public void showPersonOverview() throws Exception {
         showOverview("/view/PersonOverview.fxml");
     }
 
     @FXML
-    public void showChatOverview() throws IOException {
+    public void showChatOverview() throws Exception {
         showOverview("/view/ChatOverview.fxml");
     }
 
-    public boolean addNewContactDialog() throws IOException {
+    public boolean addNewContactDialog() throws Exception {
         return showModal("/view/AddNewContact.fxml", "Edit Person");
     }
 
-    public boolean addNewChatDialog() throws IOException {
+    public boolean addNewChatDialog() throws Exception {
         return showModal("/view/ChatEditDialog.fxml", "New Chat");
     }
 
-    public boolean showChatInvites() throws IOException{
+    public boolean showChatInvites() throws Exception {
         return showModal("view/ChatInvites.fxml", "Chat invites");
     }
 
@@ -148,7 +148,7 @@ public class Main extends Application {
             primaryStage.setScene(scene);
             primaryStage.setResizable(false);
             primaryStage.show();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -156,4 +156,8 @@ public class Main extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+
+    //public boolean showNotariatService() throws Exception {
+    //    return showModal("/view/AddNewContact.fxml", "Edit Person");
+    //}
 }

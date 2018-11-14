@@ -1,6 +1,7 @@
 package gui.controller;
 
 import communication.UserInfo;
+import gui.util.AlertFactory;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -51,12 +52,8 @@ public class PersonOverviewController implements IDataStateController {
             dataState.removeContact(user);
         } else {
             // Nothing selected.
-            Alert alert = new Alert(Alert.AlertType.WARNING);
+            Alert alert = AlertFactory.WarningAlert("No Selection", "Please select a person in the table.");
             alert.initOwner(mainApp.getPrimaryStage());
-            alert.setTitle("No Selection");
-            alert.setHeaderText("No Person Selected");
-            alert.setContentText("Please select a person in the table.");
-
             alert.showAndWait();
         }
     }
@@ -65,12 +62,8 @@ public class PersonOverviewController implements IDataStateController {
     private void handleNewPerson() throws Exception {
         boolean okClicked = mainApp.addNewContactDialog();
         if (okClicked) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            Alert alert = AlertFactory.InformationAlert("Success", "Kontakt wurde erfolgreich in Kontaktliste aufgenommen.");
             alert.initOwner(mainApp.getPrimaryStage());
-            alert.setTitle("Success");
-            alert.setHeaderText("Kontakt hinzugefügt");
-            alert.setContentText("Kontakt wurde erfolgreich in Kontaktliste aufgenommen.");
-
             alert.showAndWait();
         }
     }

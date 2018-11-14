@@ -1,5 +1,8 @@
 package gui.controller;
 
+import gui.state.DataState;
+import gui.util.AlertFactory;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import gui.Main;
@@ -9,9 +12,12 @@ import java.io.IOException;
 public class RootLayoutController {
 
     private Main mainApp;
+    private DataState dataState;
 
-    public void setMainApp(Main mainApp) {
+    public void setMainApp(Main mainApp, DataState dataState)
+    {
         this.mainApp = mainApp;
+        this.dataState = dataState;
     }
 
     @FXML
@@ -31,19 +37,44 @@ public class RootLayoutController {
     }
 
     @FXML
-    private void handleShowChatOverview() throws IOException {
+    private void handleShowChatOverview() throws Exception {
         System.out.println("Chat");
         mainApp.showChatOverview();
 
     }
 
     @FXML
-    private void handleShowAddressBookOverview() throws IOException {
+    private void handleShowAddressBookOverview() throws Exception {
         System.out.println("Address Book");
         mainApp.showPersonOverview();
 
     }
 
+    @FXML
+    private void handleShowChatInvites() throws Exception {
+        System.out.println("Chat invites");
+        if(dataState.getChatInvites().size() > 0){
+            try {
+                boolean noMoreInvites = mainApp.showChatInvites();
+                if(noMoreInvites){
+                    Alert alert = AlertFactory.InformationAlert("Chat Einladung", "Du hast keine neuen Einladungen mehr.");
+                    alert.initOwner(mainApp.getPrimaryStage());
+                    alert.showAndWait();
+                }
+            } catch (Exception e){
+                System.out.println(e.getStackTrace());
+            }
+        }
+        else {
+            Alert alert = AlertFactory.InformationAlert("Chat Einladung", "Du hast keine neuen Einladungen mehr.");
+            alert.initOwner(mainApp.getPrimaryStage());
+            alert.showAndWait();
+        }
+    }
 
-
+    @FXML
+    private void handleShowNotariatService() throws Exception {
+        System.out.println("Notariat Service");
+        //mainApp.showNotariatService();
+    }
 }

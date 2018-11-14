@@ -18,6 +18,8 @@
             <items>
               <MenuItem mnemonicParsing="false" onAction="#handleShowAddressBookOverview" text="Address Book" />
               <MenuItem mnemonicParsing="false" onAction="#handleShowChatOverview" text="Chat" />
+              <MenuItem mnemonicParsing="false" onAction="#handleShowChatInvites" text="Chat invites"></MenuItem>
+              <MenuItem mnemonicParsing="false" onAction="#handleShowNotariatService" text="Notariat Service"></MenuItem>
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Help">
