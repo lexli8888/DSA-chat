@@ -107,7 +107,7 @@ public class DataState {
         chatInvites.clear();
 
         List<ChatInfo> chatInvitesHistory = client.getChatInvites();
-        for (ChatInfo chatInvite : chatInvites) {
+        for (ChatInfo chatInvite : chatInvitesHistory) {
             boolean alreadyExists = false;
             for (ChatInfo chat : chats) {
                 if (chat.getId().equals(chatInvite.getId())) {
