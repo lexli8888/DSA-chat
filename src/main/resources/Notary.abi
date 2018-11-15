@@ -1,0 +1,1 @@
+[{"constant":true,"inputs":[{"name":"recipient","type":"address"},{"name":"hash","type":"bytes32"}],"name":"verify","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"hash","type":"bytes32"}],"name":"store","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"}]

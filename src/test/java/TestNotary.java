@@ -9,13 +9,12 @@ import java.nio.file.Paths;
 import java.util.Map;
 
 import static io.iconator.testonator.TestBlockchain.CREDENTIAL_0;
-import static io.iconator.testonator.TestBlockchain.CREDENTIAL_1;
 import static io.iconator.testonator.TestBlockchain.compile;
-import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class TestNotary {
 
+
+public class TestNotary {
     @Test
     public void testContact() throws Exception {
         TestBlockchain blockchain = TestBlockchain.run();
