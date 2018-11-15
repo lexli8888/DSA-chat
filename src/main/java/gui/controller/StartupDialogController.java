@@ -35,10 +35,11 @@ public class StartupDialogController implements IDataStateController {
         String firstName = FirstName.getText();
         String lastName = LastName.getText();
         String userName = UserName.getText();
+        String notaryAdress = ""; //TODO
 
 
         if (!userName.isEmpty() && !firstName.isEmpty() && !lastName.isEmpty()) {
-            dataState.register(userName, firstName, lastName);
+            dataState.register(userName, firstName, lastName, notaryAdress);
         } else {
             ErrorMsg.setText("Bitte Benutzername, Vorname und Nachname angeben");
         }

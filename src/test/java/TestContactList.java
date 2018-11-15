@@ -34,7 +34,7 @@ public class TestContactList {
 
         ContactList contactList = new ContactList();
         List<UserInfo> contacts = new ArrayList<>();
-        contacts.add(UserInfo.New(keyPair.getPublic(), "alex", "Alexander", "van Schie"));
+        contacts.add(UserInfo.New(keyPair.getPublic(), "alex", "Alexander", "van Schie", ""));
         contactList.setContacts(contacts);
 
         assertTrue(client1.saveContactList(contactList));

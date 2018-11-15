@@ -8,17 +8,19 @@ public class UserInfo {
     private String username;
     private String firstName;
     private String lastName;
+    private String notaryAddress;
 
     public UserInfo() {
 
     }
 
-    public static UserInfo New(PublicKey publicKey, String username, String firstName, String lastName) {
+    public static UserInfo New(PublicKey publicKey, String username, String firstName, String lastName, String notaryAddress) {
         UserInfo info = new UserInfo();
         info.publicKey = publicKey;
         info.username = username;
         info.firstName = firstName;
         info.lastName = lastName;
+        info.notaryAddress = notaryAddress;
         return info;
     }
 
@@ -67,5 +69,13 @@ public class UserInfo {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getNotaryAddress() {
+        return notaryAddress;
+    }
+
+    public void setNotaryAddress(String notaryAddress) {
+        this.notaryAddress = notaryAddress;
     }
 }

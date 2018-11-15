@@ -52,10 +52,10 @@ public class DataState {
         return messages.get(chat.getId());
     }
 
-    public boolean register(String userName, String firstName, String lastName) throws Exception {
+    public boolean register(String userName, String firstName, String lastName, String notaryAddress) throws Exception {
         KeyPair keyPair = KeyPairFactory.GenerateKeyPair();
 
-        UserInfo user = UserInfo.New(keyPair.getPublic(), userName, firstName, lastName);
+        UserInfo user = UserInfo.New(keyPair.getPublic(), userName, firstName, lastName, notaryAddress);
         if (client.register(user, keyPair)) {
             createKeyFile(keyPair, userName, firstName, lastName);
             return true;

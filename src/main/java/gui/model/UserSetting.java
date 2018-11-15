@@ -9,6 +9,7 @@ public class UserSetting {
     private String username;
     private String firstName;
     private String lastName;
+    private String notaryAddress;
 
     public UserSetting(){}
 
@@ -20,7 +21,7 @@ public class UserSetting {
     }
 
     public UserInfo toUserInfo() {
-        return UserInfo.New(keyPair.getPublic(), username, firstName, lastName);
+        return UserInfo.New(keyPair.getPublic(), username, firstName, lastName, notaryAddress);
     }
 
     public KeyPair getKeyPair() {
@@ -55,5 +56,11 @@ public class UserSetting {
         this.lastName = lastName;
     }
 
+    public String getNotaryAddress() {
+        return notaryAddress;
+    }
 
+    public void setNotaryAddress(String notaryAddress) {
+        this.notaryAddress = notaryAddress;
+    }
 }
