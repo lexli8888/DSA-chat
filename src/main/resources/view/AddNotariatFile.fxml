@@ -2,22 +2,27 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="255.0" prefWidth="456.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.AddNotariatFileController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.AddNotariatFileController">
     <children>
 
-        <TextField fx:id="filepath" layoutX="125.0" layoutY="95.0" />
-        <Label layoutX="26.0" layoutY="100.0" text="Dateipfad:" />
-        <Button layoutX="152.0" layoutY="180.0" mnemonicParsing="false" onAction="#handleDatei" text="Datei hinzufügen" />
-
-        <Label layoutX="144.0" layoutY="14.0" text="Notariat Service">
+        <Label layoutX="100.0" layoutY="14.0" text="Notariat Service">
             <font>
                 <Font size="24.0" />
             </font>
         </Label>
-      <Button layoutX="333.0" layoutY="95.0" mnemonicParsing="false" onAction="#handleBrowse" text="Durchsuchen" />
+
+        <Button layoutX="230.0" layoutY="100.0" mnemonicParsing="false" onAction="#handleSend" text="Datei senden" />
+        <Button layoutX="70.0" layoutY="100.0" mnemonicParsing="false" onAction="#handleVerify" text="Datei verifizieren" />
+
+        <Label fx:id="InfoMsg" layoutX="100.0" layoutY="150.0" prefHeight="17.0" prefWidth="200.0" textFill="RED">
+            <font>
+                <Font size="12.0" />
+            </font>
+        </Label>
+
+
     </children>
 </AnchorPane>

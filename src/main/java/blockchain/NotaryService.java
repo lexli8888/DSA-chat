@@ -45,6 +45,7 @@ public class NotaryService {
         return this.contract.verify(address, checksum).send();
     }
 
+    //TODO does this has to be checksum, address not address, checksum like method above
     public BigInteger verify(File file, String address) throws Exception {
         return this.verify(SignatureUtil.getFileSignature(file), address);
     }
