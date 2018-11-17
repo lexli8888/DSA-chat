@@ -55,18 +55,17 @@ public class DataState {
     public boolean register(String userName, String firstName, String lastName, String walletPath, String walletPassword, String notaryAddress) throws Exception {
         KeyPair keyPair = KeyPairFactory.GenerateKeyPair();
 
-        UserInfo user = UserInfo.New(keyPair.getPublic(), userName, firstName, lastName, walletPath, walletPassword, notaryAddress);
+        UserInfo user = UserInfo.New(keyPair.getPublic(), userName, firstName, lastName, notaryAddress);
         if (client.register(user, keyPair)) {
-            //TODO maybe add walletPasswort and walletPath
-            createKeyFile(keyPair, userName, firstName, lastName);
+            createKeyFile(keyPair, userName, firstName, lastName, walletPath, walletPassword);
             return true;
         }
 
         return false;
     }
 
-    private void createKeyFile(KeyPair keyPair, String username, String firstname, String lastname) throws Exception {
-        UserSetting user = new UserSetting(keyPair, username, firstname, lastname);
+    private void createKeyFile(KeyPair keyPair, String username, String firstname, String lastname, String walletPath, String walletPassword) throws Exception {
+        UserSetting user = new UserSetting(keyPair, username, firstname, lastname, walletPath, walletPassword);
 
         File customDir = new File(AppDataPath);
 
@@ -211,5 +210,9 @@ public class DataState {
     public ObservableList<ChatInfo> getChatInvites() throws Exception {
         loadChatInvites();
         return chatInvites;
+    }
+
+    public UserSetting getUser() {
+        return user;
     }
 }

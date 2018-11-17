@@ -19,7 +19,7 @@ public class ChatClientTestHelper {
                 client.discoverClient(clients.get(0));
             }
 
-            UserInfo info = UserInfo.New(key.getPublic(), username, "first " + i, "last " + i, "", "",  "");
+            UserInfo info = UserInfo.New(key.getPublic(), username, "first " + i, "last " + i,  "");
             if (register && !client.register(info, key)) {
                 throw new Exception("could not register client");
             }

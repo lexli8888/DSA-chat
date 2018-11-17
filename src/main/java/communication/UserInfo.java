@@ -8,22 +8,18 @@ public class UserInfo {
     private String username;
     private String firstName;
     private String lastName;
-    private String walletPath;
-    private String walletPassword;
     private String notaryAddress;
 
     public UserInfo() {
 
     }
 
-    public static UserInfo New(PublicKey publicKey, String username, String firstName, String lastName, String walletPath, String walletPassword , String notaryAddress) {
+    public static UserInfo New(PublicKey publicKey, String username, String firstName, String lastName, String notaryAddress) {
         UserInfo info = new UserInfo();
         info.publicKey = publicKey;
         info.username = username;
         info.firstName = firstName;
         info.lastName = lastName;
-        info.walletPath = walletPath;
-        info.walletPassword = walletPassword;
         info.notaryAddress = notaryAddress;
         return info;
     }
@@ -73,22 +69,6 @@ public class UserInfo {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getWalletPath() {
-        return walletPath;
-    }
-
-    public void setWalletPath(String walletPath) {
-        this.walletPath = walletPath;
-    }
-
-    public String getWalletPassword() {
-        return walletPassword;
-    }
-
-    public void setWalletPassword(String walletPassword) {
-        this.walletPassword = walletPassword;
     }
 
     public String getNotaryAddress() {

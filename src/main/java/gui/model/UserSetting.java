@@ -15,15 +15,17 @@ public class UserSetting {
 
     public UserSetting(){}
 
-    public UserSetting(KeyPair keyPair, String username, String firstName, String lastName) {
+    public UserSetting(KeyPair keyPair, String username, String firstName, String lastName, String walletPath, String walletPassword) {
         this.keyPair = keyPair;
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.walletPath = walletPath;
+        this.walletPassword = walletPassword;
     }
 
     public UserInfo toUserInfo() {
-        return UserInfo.New(keyPair.getPublic(), username, firstName, lastName, walletPath, walletPassword, notaryAddress);
+        return UserInfo.New(keyPair.getPublic(), username, firstName, lastName, notaryAddress);
     }
 
     public KeyPair getKeyPair() {
