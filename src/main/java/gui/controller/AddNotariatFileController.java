@@ -24,7 +24,7 @@ public class AddNotariatFileController implements IDataStateModalController {
     private TextField infoField;
 
     public AddNotariatFileController() throws IOException, CipherException {
-        //TODO can you please review this
+        //TODO can you please review this. I don't get it
         notaryService = new NotaryService(dataState.getUser().getWalletPath(), dataState.getUser().getWalletPassword());
     }
 
@@ -34,7 +34,7 @@ public class AddNotariatFileController implements IDataStateModalController {
         configureFileChooser(fileChooser);
         File file = fileChooser.showOpenDialog(mainApp.getPrimaryStage());
         if (file != null) {
-            //TODO add notaryService.verify here (which address)?
+            //TODO add notaryService.verify here (which address)? userInfo.notaryAddress?
             notaryService.verify(file, "some Address");
         }
     }
