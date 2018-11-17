@@ -57,6 +57,7 @@ public class DataState {
 
         UserInfo user = UserInfo.New(keyPair.getPublic(), userName, firstName, lastName, walletPath, walletPassword, notaryAddress);
         if (client.register(user, keyPair)) {
+            //TODO maybe add walletPasswort and walletPath
             createKeyFile(keyPair, userName, firstName, lastName);
             return true;
         }
