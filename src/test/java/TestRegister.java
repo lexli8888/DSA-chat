@@ -19,7 +19,7 @@ public class TestRegister {
         ChatClient client1 = clients.get(0);
 
         KeyPair keyPair = KeyPairFactory.GenerateKeyPair();
-        UserInfo registrationInfo = UserInfo.New(keyPair.getPublic(), "pascal", "Pascal", "Bertschi", "");
+        UserInfo registrationInfo = UserInfo.New(keyPair.getPublic(), "pascal", "Pascal", "Bertschi", "", "", "");
 
         assertTrue(client1.register(registrationInfo, keyPair));
 
@@ -43,10 +43,10 @@ public class TestRegister {
         KeyPair keyPair1 = KeyPairFactory.GenerateKeyPair();
         KeyPair keyPair2 = KeyPairFactory.GenerateKeyPair();
 
-        UserInfo firstRegistrationInfo = UserInfo.New(keyPair1.getPublic(), commonUserName, "Pascal", "Bertschi", "");
+        UserInfo firstRegistrationInfo = UserInfo.New(keyPair1.getPublic(), commonUserName, "Pascal", "Bertschi", "", "",  "");
         assertTrue(client1.register(firstRegistrationInfo, keyPair1));
 
-        UserInfo secondRegistrationInfo = UserInfo.New(keyPair2.getPublic(), commonUserName, "Alexander", "van Schie", "");
+        UserInfo secondRegistrationInfo = UserInfo.New(keyPair2.getPublic(), commonUserName, "Alexander", "van Schie", "", "", "");
         assertFalse(client2.register(secondRegistrationInfo, keyPair2));
 
         UserInfo firstFetchInfo = client1.getUserInfo(commonUserName);

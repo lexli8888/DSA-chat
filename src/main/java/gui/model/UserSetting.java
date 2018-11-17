@@ -9,6 +9,8 @@ public class UserSetting {
     private String username;
     private String firstName;
     private String lastName;
+    private String walletPath;
+    private String walletPassword;
     private String notaryAddress;
 
     public UserSetting(){}
@@ -21,7 +23,7 @@ public class UserSetting {
     }
 
     public UserInfo toUserInfo() {
-        return UserInfo.New(keyPair.getPublic(), username, firstName, lastName, notaryAddress);
+        return UserInfo.New(keyPair.getPublic(), username, firstName, lastName, walletPath, walletPassword, notaryAddress);
     }
 
     public KeyPair getKeyPair() {
@@ -54,6 +56,22 @@ public class UserSetting {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getWalletPath() {
+        return walletPath;
+    }
+
+    public void setWalletPath(String walletPath) {
+        this.walletPath = walletPath;
+    }
+
+    public String getWalletPassword() {
+        return walletPassword;
+    }
+
+    public void setWalletPassword(String walletPassword) {
+        this.walletPassword = walletPassword;
     }
 
     public String getNotaryAddress() {
