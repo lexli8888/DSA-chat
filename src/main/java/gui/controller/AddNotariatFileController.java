@@ -1,5 +1,7 @@
 package gui.controller;
 
+import communication.SignatureUtil;
+import communication.UserInfo;
 import gui.Main;
 import gui.state.DataState;
 import gui.util.AlertFactory;
@@ -10,6 +12,8 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 
 public class AddNotariatFileController implements IDataStateModalController {
 
@@ -24,9 +28,18 @@ public class AddNotariatFileController implements IDataStateModalController {
     private TextField filepath;
 
     @FXML
-    public void handleDatei() {
+    public void handleDatei() throws IOException, NoSuchAlgorithmException {
         if(file != null){
-
+           //TODO Add Filesignature
+            UserInfo SelectedUser = dataState.getSelectedNotaryUser();
+            if(SelectedUser == null){
+                //store
+            }
+            else{
+                String notaryAddress = SelectedUser.getNotaryAddress();
+                //verify
+            }
+            dialogStage.close();
         }
         else{
             Alert alert = AlertFactory.ErrorAlert("No file", "Wähle eine Datai aus um fortzufahren!");

@@ -24,7 +24,7 @@ public class Main extends Application {
 
     public Main() throws Exception {
         client = new ChatClient();
-        //client.discoverOnInet("apps.bertschi.io", 4000);
+        //client.discoverOnInet("152.96.234.44", 4000);
         client.discoverOnLocalhost(4000);
 
         dataState = new DataState(client);

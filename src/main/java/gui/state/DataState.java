@@ -24,6 +24,8 @@ public class DataState {
     private UserSetting user;
     private ChatClient client;
 
+    private UserInfo selectedNotaryUser;
+
     private ObservableList<UserInfo> users = FXCollections.observableArrayList();
     private ObservableList<ChatInfo> chats = FXCollections.observableArrayList();
     private ObservableList<ChatInfo> chatInvites = FXCollections.observableArrayList();
@@ -210,5 +212,13 @@ public class DataState {
     public ObservableList<ChatInfo> getChatInvites() throws Exception {
         loadChatInvites();
         return chatInvites;
+    }
+
+    public void setSelectedNotaryUser(UserInfo user) {
+        selectedNotaryUser = user;
+    }
+
+    public UserInfo getSelectedNotaryUser(){
+        return selectedNotaryUser;
     }
 }
