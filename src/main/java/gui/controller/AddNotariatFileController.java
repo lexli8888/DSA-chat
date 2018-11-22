@@ -1,6 +1,6 @@
 package gui.controller;
 
-import communication.SignatureUtil;
+import blockchain.NotaryService;
 import communication.UserInfo;
 import gui.Main;
 import gui.state.DataState;
@@ -13,8 +13,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
+import java.math.BigInteger;
 
 public class AddNotariatFileController implements IDataStateModalController {
 
@@ -24,19 +23,18 @@ public class AddNotariatFileController implements IDataStateModalController {
     private DataState dataState;
     private Stage dialogStage;
     private boolean isOkClicked = false;
+    private NotaryService notaryService;
 
     private UserInfo user;
 
     @Override
     public void setParams(Object params) {
-        System.out.println(params);
-        if(params != null) {
+        if (params != null) {
             this.user = (UserInfo) params;
             this.btn.setText("Datei verifizieren");
         } else {
             this.btn.setText("Datei signieren");
         }
-
     }
 
 
@@ -47,19 +45,18 @@ public class AddNotariatFileController implements IDataStateModalController {
     private Button btn;
 
     @FXML
-    public void handleDatei() throws IOException, NoSuchAlgorithmException {
-        if(file != null){
-           //TODO Add Filesignature
-            if(user == null){
-                //store
-            }
-            else{
+    public void handleDatei() throws Exception {
+        if (file != null) {
+            if (user == null) {
+                this.notaryService.store(file);
+            } else {
                 String notaryAddress = user.getNotaryAddress();
-                //verify
+                BigInteger timestamp = this.notaryService.verify(file, notaryAddress);
+                //TODO message box
+                //TODO catch exception
             }
             dialogStage.close();
-        }
-        else{
+        } else {
             Alert alert = AlertFactory.ErrorAlert("No file", "Wähle eine Datai aus um fortzufahren!");
             alert.initOwner(mainapp.getPrimaryStage());
             alert.showAndWait();
@@ -72,7 +69,7 @@ public class AddNotariatFileController implements IDataStateModalController {
         filepath.clear();
         file = fileChooser.showOpenDialog(mainapp.getPrimaryStage());
         if (file != null) {
-           filepath.setText(file.getPath());
+            filepath.setText(file.getPath());
         }
     }
 
@@ -90,5 +87,6 @@ public class AddNotariatFileController implements IDataStateModalController {
     public void setState(Main mainApp, DataState state) throws Exception {
         this.mainapp = mainApp;
         this.dataState = state;
+        this.notaryService = new NotaryService(state.getUser().getWalletPath(), state.getUser().getWalletPassword());
     }
 }
