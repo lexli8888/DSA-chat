@@ -37,6 +37,11 @@ public class ChatInvitesController implements IDataStateModalController {
     }
 
     @Override
+    public void setParams(Object params) {
+
+    }
+
+    @Override
     public boolean isOkClicked() {
         return okClicked;
     }

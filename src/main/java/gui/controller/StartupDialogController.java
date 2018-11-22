@@ -1,18 +1,30 @@
 package gui.controller;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.fxml.FXML;
 import gui.Main;
 
+import javafx.scene.Scene;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Label;
 import gui.state.DataState;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class StartupDialogController implements IDataStateController {
 
     private Main mainApp;
     private DataState dataState;
+    private String walletPath = "";
+    private String notaryAddress = "";
 
     public StartupDialogController() throws IOException {
     }
@@ -27,6 +39,9 @@ public class StartupDialogController implements IDataStateController {
     private TextField UserName;
 
     @FXML
+    private PasswordField WalletPassword;
+
+    @FXML
     private Label ErrorMsg;
 
     @FXML
@@ -35,13 +50,13 @@ public class StartupDialogController implements IDataStateController {
         String firstName = FirstName.getText();
         String lastName = LastName.getText();
         String userName = UserName.getText();
-        String notaryAdress = ""; //TODO
+        String walletPassword = WalletPassword.getText();
 
-
-        if (!userName.isEmpty() && !firstName.isEmpty() && !lastName.isEmpty()) {
-            dataState.register(userName, firstName, lastName, notaryAdress);
+        if (!userName.isEmpty() && !firstName.isEmpty() && !lastName.isEmpty() && !walletPath.isEmpty() && !walletPassword.isEmpty())  {
+            dataState.register(userName, firstName, lastName, walletPath, walletPassword, notaryAddress);
         } else {
-            ErrorMsg.setText("Bitte Benutzername, Vorname und Nachname angeben");
+            ErrorMsg.setText("Bitte Benutzername, Vorname, Nachname, Wallet auswählen und Wallet-Passwort angeben");
+            System.out.println("HERE");
         }
 
         try {
@@ -51,11 +66,53 @@ public class StartupDialogController implements IDataStateController {
         }
     }
 
+    @FXML
+    void chooseWalletFile(){
+        final FileChooser fileChooser = new FileChooser();
+        configureFileChooser(fileChooser);
+        File file = fileChooser.showOpenDialog(mainApp.getPrimaryStage());
+        if (file != null) {
+            setWalletPath(file.getAbsolutePath());
+            getNotaryAddressFromWallet();
+        }
+    }
+
 
     @Override
     public void setState(Main mainApp, DataState state) {
         this.dataState = state;
         this.mainApp = mainApp;
+    }
+
+    private static void configureFileChooser(final FileChooser fileChooser) {
+        fileChooser.setTitle("Wallet öffnen");
+        fileChooser.setInitialDirectory(
+                new File(System.getProperty("user.home"))
+        );
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON", "*.json"));
+    }
+
+    private void getNotaryAddressFromWallet() {
+        try {
+            byte[] jsonData = Files.readAllBytes(Paths.get(walletPath));
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            JsonNode rootNode = objectMapper.readTree(jsonData);
+            JsonNode address = rootNode.path("address");
+
+            setNotaryAddress(address.asText());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setWalletPath(String walletPath) {
+        this.walletPath = walletPath;
+    }
+
+    public void setNotaryAddress(String notaryAddress) {
+        this.notaryAddress = notaryAddress;
     }
 }
 

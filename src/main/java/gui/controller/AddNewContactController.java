@@ -27,6 +27,12 @@ public class AddNewContactController implements IDataStateModalController {
         return okClicked;
     }
 
+    @Override
+    public void setParams(Object params) {
+
+    }
+
+
     @FXML
     private void handleOk() {
         if (isInputValid()) {

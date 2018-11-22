@@ -24,8 +24,6 @@ public class DataState {
     private UserSetting user;
     private ChatClient client;
 
-    private UserInfo selectedNotaryUser;
-
     private ObservableList<UserInfo> users = FXCollections.observableArrayList();
     private ObservableList<ChatInfo> chats = FXCollections.observableArrayList();
     private ObservableList<ChatInfo> chatInvites = FXCollections.observableArrayList();
@@ -54,20 +52,20 @@ public class DataState {
         return messages.get(chat.getId());
     }
 
-    public boolean register(String userName, String firstName, String lastName, String notaryAddress) throws Exception {
+    public boolean register(String userName, String firstName, String lastName, String walletPath, String walletPassword, String notaryAddress) throws Exception {
         KeyPair keyPair = KeyPairFactory.GenerateKeyPair();
 
         UserInfo user = UserInfo.New(keyPair.getPublic(), userName, firstName, lastName, notaryAddress);
         if (client.register(user, keyPair)) {
-            createKeyFile(keyPair, userName, firstName, lastName);
+            createKeyFile(keyPair, userName, firstName, lastName, walletPath, walletPassword);
             return true;
         }
 
         return false;
     }
 
-    private void createKeyFile(KeyPair keyPair, String username, String firstname, String lastname) throws Exception {
-        UserSetting user = new UserSetting(keyPair, username, firstname, lastname);
+    private void createKeyFile(KeyPair keyPair, String username, String firstname, String lastname, String walletPath, String walletPassword) throws Exception {
+        UserSetting user = new UserSetting(keyPair, username, firstname, lastname, walletPath, walletPassword);
 
         File customDir = new File(AppDataPath);
 
@@ -214,11 +212,7 @@ public class DataState {
         return chatInvites;
     }
 
-    public void setSelectedNotaryUser(UserInfo user) {
-        selectedNotaryUser = user;
-    }
-
-    public UserInfo getSelectedNotaryUser(){
-        return selectedNotaryUser;
+    public UserSetting getUser() {
+        return user;
     }
 }

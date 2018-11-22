@@ -7,6 +7,7 @@ import gui.state.DataState;
 import gui.util.AlertFactory;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -24,19 +25,36 @@ public class AddNotariatFileController implements IDataStateModalController {
     private Stage dialogStage;
     private boolean isOkClicked = false;
 
+    private UserInfo user;
+
+    @Override
+    public void setParams(Object params) {
+        System.out.println(params);
+        if(params != null) {
+            this.user = (UserInfo) params;
+            this.btn.setText("Datei verifizieren");
+        } else {
+            this.btn.setText("Datei signieren");
+        }
+
+    }
+
+
     @FXML
     private TextField filepath;
+
+    @FXML
+    private Button btn;
 
     @FXML
     public void handleDatei() throws IOException, NoSuchAlgorithmException {
         if(file != null){
            //TODO Add Filesignature
-            UserInfo SelectedUser = dataState.getSelectedNotaryUser();
-            if(SelectedUser == null){
+            if(user == null){
                 //store
             }
             else{
-                String notaryAddress = SelectedUser.getNotaryAddress();
+                String notaryAddress = user.getNotaryAddress();
                 //verify
             }
             dialogStage.close();

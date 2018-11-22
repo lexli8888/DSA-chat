@@ -31,6 +31,11 @@ public class AddNewChatController implements IDataStateModalController {
         this.dialogStage = dialogStage;
     }
 
+    @Override
+    public void setParams(Object params) {
+
+    }
+
 
     public boolean isOkClicked() {
         return okClicked;

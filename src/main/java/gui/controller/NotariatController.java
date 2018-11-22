@@ -19,6 +19,11 @@ public class NotariatController implements IDataStateModalController {
     }
 
     @Override
+    public void setParams(Object params) {
+
+    }
+
+    @Override
     public boolean isOkClicked() {
        return isOkClicked;
     }

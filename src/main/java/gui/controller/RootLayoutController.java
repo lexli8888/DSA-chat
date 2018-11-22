@@ -75,7 +75,7 @@ public class RootLayoutController {
     @FXML
     private void handleShowNotariatService() throws Exception {
         System.out.println("Notariat Service");
-        if(mainApp.addNotariatFile()){
+        if(mainApp.addNotariatFile(null)){
             mainApp.showNotariat();
         }
     }

@@ -99,7 +99,6 @@ public class PersonOverviewController implements IDataStateController {
     @FXML
     public void showNotariat() throws Exception {
         UserInfo user = (UserInfo) notariatButton.getUserData();
-        dataState.setSelectedNotaryUser(user);
-        mainApp.addNotariatFile();
+        mainApp.addNotariatFile(user);
     }
 }

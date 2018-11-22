@@ -1,5 +1,6 @@
 package gui;
 
+import communication.UserInfo;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -86,7 +87,7 @@ public class Main extends Application {
         controller.setState(this, this.dataState);
     }
 
-    private boolean showModal(String resource, String title) throws Exception {
+    private boolean showModal(String resource, String title, Object params) throws Exception {
         // Load the fxml file and create a new stage for the popup dialog.
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource(resource));
@@ -102,6 +103,7 @@ public class Main extends Application {
 
         IDataStateModalController controller = loader.getController();
         controller.setDialogStage(dialogStage);
+        controller.setParams(params);
         controller.setState(this, this.dataState);
 
         // Show the dialog and wait until the user closes it
@@ -121,23 +123,23 @@ public class Main extends Application {
     }
 
     public boolean addNewContactDialog() throws Exception {
-        return showModal("/view/AddNewContact.fxml", "Edit Person");
+        return showModal("/view/AddNewContact.fxml", "Edit Person", null);
     }
 
     public boolean addNewChatDialog() throws Exception {
-        return showModal("/view/ChatEditDialog.fxml", "New Chat");
+        return showModal("/view/ChatEditDialog.fxml", "New Chat", null);
     }
 
     public boolean showChatInvites() throws Exception {
-        return showModal("/view/ChatInvites.fxml", "Chat invites");
+        return showModal("/view/ChatInvites.fxml", "Chat invites", null);
     }
 
-    public boolean addNotariatFile() throws Exception{
-        return showModal("/view/AddNotariatFile.fxml", "Add notariat file");
+    public boolean addNotariatFile(UserInfo user) throws Exception{
+        return showModal("/view/AddNotariatFile.fxml", "Add notariat file", user);
     }
 
     public boolean showNotariat() throws Exception{
-        return showModal("/view/Notariat.fxml", "Notariat service");
+        return showModal("/view/Notariat.fxml", "Notariat service", null);
     }
 
     @FXML
@@ -164,8 +166,4 @@ public class Main extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-
-    //public boolean showNotariatService() throws Exception {
-    //    return showModal("/view/AddNewContact.fxml", "Edit Person");
-    //}
 }
