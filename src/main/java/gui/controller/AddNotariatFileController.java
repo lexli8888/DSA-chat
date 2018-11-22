@@ -23,9 +23,8 @@ public class AddNotariatFileController implements IDataStateModalController {
     @FXML
     private TextField infoField;
 
-    public AddNotariatFileController() throws IOException, CipherException {
-        //TODO can you please review this. I don't get it
-        notaryService = new NotaryService(dataState.getUser().getWalletPath(), dataState.getUser().getWalletPassword());
+    public AddNotariatFileController() {
+
     }
 
     @FXML
@@ -34,8 +33,7 @@ public class AddNotariatFileController implements IDataStateModalController {
         configureFileChooser(fileChooser);
         File file = fileChooser.showOpenDialog(mainApp.getPrimaryStage());
         if (file != null) {
-            //TODO add notaryService.verify here (which address)? userInfo.notaryAddress?
-            notaryService.verify(file, "some Address");
+            notaryService.verify(file, dataState.getUser().getNotaryAddress());
         }
     }
 
@@ -64,6 +62,7 @@ public class AddNotariatFileController implements IDataStateModalController {
     public void setState(Main mainApp, DataState state) throws Exception {
         this.mainApp = mainApp;
         this.dataState = state;
+        this.notaryService = new NotaryService(dataState.getUser().getWalletPath(), dataState.getUser().getWalletPassword());
     }
 
     private static void configureFileChooser(final FileChooser fileChooser) {
