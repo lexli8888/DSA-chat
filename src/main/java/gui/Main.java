@@ -138,9 +138,6 @@ public class Main extends Application {
         return showModal("/view/AddNotariatFile.fxml", "Add notariat file", user);
     }
 
-    public boolean showNotariat() throws Exception{
-        return showModal("/view/Notariat.fxml", "Notariat service", null);
-    }
 
     @FXML
     public void showStartupDialog() {

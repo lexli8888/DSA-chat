@@ -130,6 +130,7 @@ public class DataState {
             user = serializationStrategy.deserialize(sc.nextLine(), null, UserSetting.class);
             sc.close();
 
+
             if (!client.login(user.getUsername(), user.getKeyPair())) {
                 boolean success = client.register(user.toUserInfo(), user.getKeyPair());
                 if (success) {
@@ -212,7 +213,7 @@ public class DataState {
         return chatInvites;
     }
 
-    public UserSetting getUser() {
+    public UserSetting getUserSetting() {
         return user;
     }
 }

@@ -76,7 +76,7 @@ public class RootLayoutController {
     private void handleShowNotariatService() throws Exception {
         System.out.println("Notariat Service");
         if(mainApp.addNotariatFile(null)){
-            mainApp.showNotariat();
+            //TODO Handling wenn man selbst File hinzufügt
         }
     }
 }

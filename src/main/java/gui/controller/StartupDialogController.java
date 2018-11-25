@@ -51,19 +51,18 @@ public class StartupDialogController implements IDataStateController {
         String lastName = LastName.getText();
         String userName = UserName.getText();
         String walletPassword = WalletPassword.getText();
-
         if (!userName.isEmpty() && !firstName.isEmpty() && !lastName.isEmpty() && !walletPath.isEmpty() && !walletPassword.isEmpty())  {
+
             dataState.register(userName, firstName, lastName, walletPath, walletPassword, notaryAddress);
+            try {
+                mainApp.start(mainApp.getPrimaryStage());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } else {
-            ErrorMsg.setText("Bitte Benutzername, Vorname, Nachname, Wallet auswählen und Wallet-Passwort angeben");
-            System.out.println("HERE");
+            ErrorMsg.setText("Bitte Formular vollständig ausfüllen.");
         }
 
-        try {
-            mainApp.start(mainApp.getPrimaryStage());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     @FXML

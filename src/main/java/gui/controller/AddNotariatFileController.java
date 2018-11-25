@@ -48,12 +48,24 @@ public class AddNotariatFileController implements IDataStateModalController {
     public void handleDatei() throws Exception {
         if (file != null) {
             if (user == null) {
-                this.notaryService.store(file);
+                try {
+                    this.notaryService.store(file);
+                } catch (Exception e){
+                   e.printStackTrace();
+                }
             } else {
                 String notaryAddress = user.getNotaryAddress();
-                BigInteger timestamp = this.notaryService.verify(file, notaryAddress);
-                //TODO message box
-                //TODO catch exception
+                try {
+                    BigInteger timestamp = this.notaryService.verify(file, notaryAddress);
+
+                    Alert alert = AlertFactory.InformationAlert("Verification success", "Datei wurde um " + timestamp + " verifiziert");
+                    alert.initOwner(mainapp.getPrimaryStage());
+                    alert.showAndWait();
+                } catch (Exception e) {
+                    Alert alert = AlertFactory.ErrorAlert("Verification", "Die Verifizierung ist fehlgeschlagen.");
+                    alert.initOwner(mainapp.getPrimaryStage());
+                    alert.showAndWait();
+                }
             }
             dialogStage.close();
         } else {
@@ -87,6 +99,11 @@ public class AddNotariatFileController implements IDataStateModalController {
     public void setState(Main mainApp, DataState state) throws Exception {
         this.mainapp = mainApp;
         this.dataState = state;
-        this.notaryService = new NotaryService(state.getUser().getWalletPath(), state.getUser().getWalletPassword());
+        try {
+            // TODO -> Exception Invalid Password provided
+            this.notaryService = new NotaryService(state.getUserSetting().getWalletPath(), state.getUserSetting().getWalletPassword());
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+        }
     }
 }

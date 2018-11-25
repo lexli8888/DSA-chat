@@ -42,12 +42,11 @@ public class PersonOverviewController implements IDataStateController {
             userNameLabel.setText(user.getUsername());
             firstNameLabel.setText(user.getFirstName());
             lastNameLabel.setText(user.getLastName());
-
+            notariatButton.setDisable(false);
         } else {
             userNameLabel.setText("");
             firstNameLabel.setText("");
             lastNameLabel.setText("");
-            notariatButton.setUserData(user);
         }
     }
 
@@ -81,6 +80,8 @@ public class PersonOverviewController implements IDataStateController {
         this.dataState = state;
         this.mainApp = mainApp;
 
+        notariatButton.setDisable(true);
+
         personTable.setItems(state.getUsers());
         userNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getUsername()));
         statusColumn.setCellValueFactory(cellData -> {
@@ -98,7 +99,8 @@ public class PersonOverviewController implements IDataStateController {
 
     @FXML
     public void showNotariat() throws Exception {
-        UserInfo user = (UserInfo) notariatButton.getUserData();
+        UserInfo user = dataState.getUser(userNameLabel.getText());
+        System.out.println(user.getUsername());
         mainApp.addNotariatFile(user);
     }
 }
