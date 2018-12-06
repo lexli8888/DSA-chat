@@ -52,15 +52,23 @@ public class AddNotariatFileController implements IDataStateModalController {
                     this.notaryService.store(file);
                 } catch (Exception e){
                    e.printStackTrace();
+                    Alert alert = AlertFactory.ErrorAlert("Verification", "Die Verifizierung ist fehlgeschlagen, prüfe ob genug Coins vorhanden sind.");
+                    alert.initOwner(mainapp.getPrimaryStage());
+                    alert.showAndWait();
                 }
             } else {
                 String notaryAddress = user.getNotaryAddress();
                 try {
                     BigInteger timestamp = this.notaryService.verify(file, notaryAddress);
-
-                    Alert alert = AlertFactory.InformationAlert("Verification success", "Datei wurde um " + timestamp + " verifiziert");
-                    alert.initOwner(mainapp.getPrimaryStage());
-                    alert.showAndWait();
+                    if (timestamp.compareTo(BigInteger.valueOf(0)) == 0) {
+                        Alert alert = AlertFactory.InformationAlert("Verification failed", "Datei wurde nicht verifiziert");
+                        alert.initOwner(mainapp.getPrimaryStage());
+                        alert.showAndWait();
+                    } else {
+                        Alert alert = AlertFactory.InformationAlert("Verification success", "Datei wurde um " + timestamp + " verifiziert");
+                        alert.initOwner(mainapp.getPrimaryStage());
+                        alert.showAndWait();
+                    }
                 } catch (Exception e) {
                     Alert alert = AlertFactory.ErrorAlert("Verification", "Die Verifizierung ist fehlgeschlagen.");
                     alert.initOwner(mainapp.getPrimaryStage());
