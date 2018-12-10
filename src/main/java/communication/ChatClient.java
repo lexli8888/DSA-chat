@@ -9,6 +9,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.security.KeyPair;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -86,6 +87,7 @@ public class ChatClient {
         for(String item : data) {
             messages.add(serializationStrategy.deserialize(item, null, ChatMessage.class));
         }
+        messages.sort(Comparator.comparing(ChatMessage::getDate));
         return messages;
     }
 
