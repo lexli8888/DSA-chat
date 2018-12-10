@@ -100,7 +100,6 @@ public class AddNotariatFileController implements IDataStateModalController {
         this.mainapp = mainApp;
         this.dataState = state;
         try {
-            // TODO -> Exception Invalid Password provided
             this.notaryService = new NotaryService(state.getUserSetting().getWalletPath(), state.getUserSetting().getWalletPassword());
         } catch (Exception e){
             System.out.println(e.getMessage());
